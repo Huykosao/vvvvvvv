@@ -1,0 +1,51 @@
+﻿@model ManageStudentsV2.Models.Nien_khoa
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_ManageStudentHome.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Nien_khoa</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ten_nien_khoa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ten_nien_khoa)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.nam_bat_dau)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.nam_bat_dau)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.nam_ket_thuc)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.nam_ket_thuc)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Khoa.ten_khoa)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Khoa.ten_khoa)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ma_nien_khoa }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

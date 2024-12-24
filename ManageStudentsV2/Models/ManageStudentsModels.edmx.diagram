@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="f7624fc28719421192befa5090e9b136" Name="Diagram1" ZoomLevel="63">
+        <EntityTypeShape EntityType="Quan_Ly_Sinh_Vien_Model.Diem" Width="1.5" PointX="12" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Quan_Ly_Sinh_Vien_Model.Giao_vien" Width="1.5" PointX="3" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Quan_Ly_Sinh_Vien_Model.Hoc_sinh" Width="1.5" PointX="9.75" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Quan_Ly_Sinh_Vien_Model.Khoa" Width="1.5" PointX="0.75" PointY="6.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="Quan_Ly_Sinh_Vien_Model.Lich_hoc" Width="1.5" PointX="12" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Quan_Ly_Sinh_Vien_Model.Lop_chinh" Width="1.5" PointX="7.5" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="Quan_Ly_Sinh_Vien_Model.Lop_dang_ky" Width="1.5" PointX="15" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="Quan_Ly_Sinh_Vien_Model.Lop_hoc_phan" Width="1.5" PointX="9.75" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="Quan_Ly_Sinh_Vien_Model.Mon_hoc" Width="1.5" PointX="7.5" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="Quan_Ly_Sinh_Vien_Model.Nganh" Width="1.5" PointX="5.25" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Quan_Ly_Sinh_Vien_Model.Nien_khoa" Width="1.5" PointX="3" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Quan_Ly_Sinh_Vien_Model.Role" Width="1.5" PointX="1.5" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="Quan_Ly_Sinh_Vien_Model.User" Width="1.5" PointX="0.75" PointY="3.375" IsExpanded="true" />
+        <AssociationConnector Association="Quan_Ly_Sinh_Vien_Model.fk_diem_hocsinh" ManuallyRouted="false" />
+        <AssociationConnector Association="Quan_Ly_Sinh_Vien_Model.fk_diem_monhoc" ManuallyRouted="false" />
+        <AssociationConnector Association="Quan_Ly_Sinh_Vien_Model.fk_giaovien_khoa" ManuallyRouted="false" />
+        <AssociationConnector Association="Quan_Ly_Sinh_Vien_Model.fk_lop_giaovien" ManuallyRouted="false" />
+        <AssociationConnector Association="Quan_Ly_Sinh_Vien_Model.fk_magiao_users" ManuallyRouted="false" />
+        <AssociationConnector Association="Quan_Ly_Sinh_Vien_Model.fk_hocsinh_lop" ManuallyRouted="false" />
+        <AssociationConnector Association="Quan_Ly_Sinh_Vien_Model.fk_lopdangky_hocsinh" ManuallyRouted="false" />
+        <AssociationConnector Association="Quan_Ly_Sinh_Vien_Model.fk_masinh_users" ManuallyRouted="false" />
+        <AssociationConnector Association="Quan_Ly_Sinh_Vien_Model.fk_nienkhoa_khoa" ManuallyRouted="false" />
+        <AssociationConnector Association="Quan_Ly_Sinh_Vien_Model.fk_lichhoc_lophocphan" ManuallyRouted="false" />
+        <AssociationConnector Association="Quan_Ly_Sinh_Vien_Model.fk_lop_nganh" ManuallyRouted="false" />
+        <AssociationConnector Association="Quan_Ly_Sinh_Vien_Model.fk_lophocphan_lopchinh" ManuallyRouted="false" />
+        <AssociationConnector Association="Quan_Ly_Sinh_Vien_Model.fk_lopdangky_lophocphan" ManuallyRouted="false" />
+        <AssociationConnector Association="Quan_Ly_Sinh_Vien_Model.fk_lophocphan_mon" ManuallyRouted="false" />
+        <AssociationConnector Association="Quan_Ly_Sinh_Vien_Model.fk_nganh_nienkhoa" ManuallyRouted="false" />
+        <AssociationConnector Association="Quan_Ly_Sinh_Vien_Model.FK__Users__RoleID__5DCAEF64" ManuallyRouted="false" />
+        <AssociationConnector Association="Quan_Ly_Sinh_Vien_Model.Phan_cong" ManuallyRouted="false" />
+        <AssociationConnector Association="Quan_Ly_Sinh_Vien_Model.fk_monhoc_nganh" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

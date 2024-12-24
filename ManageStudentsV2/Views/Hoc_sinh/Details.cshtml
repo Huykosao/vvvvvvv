@@ -1,0 +1,74 @@
+﻿@model ManageStudentsV2.Models.Hoc_sinh
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_ManageStudentHome.cshtml";
+}
+
+<h2>Deails</h2>
+
+
+@*<di
+    >
+        <h4>Hoc_sinh</
+    4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.Displ
+    yNameFor(
+    odel => model.ten_sinh_vien)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.ten_sinh_vien)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Lop_chinh.ten_lop)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Lop_chinh.ten_lop)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(model => model.User.Username)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.User.Username)
+            </dd>
+
+        </dl>
+    </div>*@
+<h2>Thông tin chi tiết sinh viên</h2>
+<table class="table">
+    <tr>
+        <th>Mã sinh viên</th>
+        <td>@Model.ma_sinh_vien</td>
+    </tr>
+    <tr>
+        <th>Tên sinh viên</th>
+        <td>@Model.ten_sinh_vien</td>
+    </tr>
+    <tr>
+        <th>Lớp</th>
+        <td>@Model.Lop_chinh.ten_lop</td>
+    </tr>
+    <tr>
+        <th>Ngành</th>
+        <td>@Model.Lop_chinh.Nganh.ten_nganh</td>
+    </tr>
+    <tr>
+        <th>Khóa</th>
+        <td>@Model.Lop_chinh.Nganh.Nien_khoa.ten_nien_khoa</td>
+    </tr>
+    <tr>
+        <th>Khoa</th>
+        <td>@Model.Lop_chinh.Nganh.Nien_khoa.Khoa.ten_khoa</td>
+    </tr>
+</table>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ma_sinh_vien }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

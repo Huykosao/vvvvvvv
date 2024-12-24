@@ -1,0 +1,40 @@
+﻿@model ManageStudentsV2.Models.Giao_vien
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_ManageStudentHome.cshtml";
+}
+
+<h2>Details</h2>
+
+<div class="create-forms">
+    <h4> @Html.DisplayFor(model => model.ma_giao_vien)</h4>
+    <div class="detail">
+        <div class="detail-item">
+            <div class="name">Tên Giáo Viên:</div>
+            <div class="value">
+                @Html.DisplayFor(model => model.ten_giao_vien)
+            </div>
+        </div>
+
+        <div class="detail-item">
+            <div class="name">Khoa:</div>
+            <div class="value">
+                @Html.DisplayFor(model => model.Khoa.ten_khoa)
+            </div>
+        </div>
+
+        <div class="detail-item">
+            <div class="name">Tên Tài Khoản:</div>
+            <div class="value">
+                @Html.DisplayFor(model => model.User.Username)
+            </div>
+        </div>
+    </div>
+
+    <div class="actions">
+        @Html.ActionLink("Edit", "Edit", new { id = Model.ma_giao_vien }, new { @class = "btn btn-primary" })
+        @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-secondary" })
+    </div>
+</div>
+

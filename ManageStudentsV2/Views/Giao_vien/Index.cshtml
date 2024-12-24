@@ -1,0 +1,57 @@
+﻿@model PagedList.IPagedList<ManageStudentsV2.Models.Giao_vien>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Danh sách Giáo Viên";
+    Layout = "~/Views/Shared/_ManageStudentHome.cshtml";
+}
+
+<div class="headerAdd">
+    <h2>Danh sách Giáo Viên</h2>
+    <div class="button-add">
+        @Html.ActionLink("+ Thêm Giáo Viên", "Create", null, new { @class = "btnAdd" })
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Tên Giáo Viên</th>
+            <th>Khoa</th>
+            <th>Tên Tài Khoản</th>
+            <th>Hành Động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.ten_giao_vien)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Khoa.ten_khoa)</td>
+                    <td>@Html.DisplayFor(modelItem => item.User.Username)</td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.ma_giao_vien }, new { @class = "btnEdit" }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.ma_giao_vien }, new { @class = "btnDetails" }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.ma_giao_vien }, new { @class = "btnDelete" })
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="4" class="no-data">Không tìm thấy giáo viên nào phù hợp.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="row">
+    <div class="col">
+        @using (Html.BeginForm("Index", "Giao_vien", FormMethod.Get))
+        {<p> Kích thước trang: @Html.DropDownList("size", (List<SelectListItem>)ViewBag.size, new { @onchange = "this.form.submit();" }) </p>}
+    </div>
+    <div class="col_right"> Trang: @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount </div>
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, size = ViewBag.currentSize }))
+</div>

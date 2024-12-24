@@ -1,0 +1,41 @@
+﻿@model ManageStudentsV2.Models.Mon_hoc
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_ManageStudentHome.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Mon_hoc</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ten_mon)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ten_mon)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.mo_ta_mon)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.mo_ta_mon)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

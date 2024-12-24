@@ -1,0 +1,46 @@
+﻿@model IEnumerable<ManageStudentsV2.Models.Lop_dang_ky>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_ManageStudentHome.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ngay_dk)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Hoc_sinh.ten_sinh_vien)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Lop_hoc_phan.ma_hoc_phan)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ngay_dk)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Hoc_sinh.ten_sinh_vien)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Lop_hoc_phan.ma_hoc_phan)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,59 @@
+﻿@model ManageStudentsV2.Models.Diem
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_ManageStudentHome.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Diem</h4>
+
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.diem_so_1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.diem_so_1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.diem_so_2)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.diem_so_2)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.diem_cuoi_ky)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.diem_cuoi_ky)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Hoc_sinh.ten_sinh_vien)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Hoc_sinh.ten_sinh_vien)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Mon_hoc.ten_mon)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Mon_hoc.ten_mon)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,39 @@
+﻿@model ManageStudentsV2.Models.Khoa
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_ManageStudentHome.cshtml";
+}
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    <div class="create-forms">
+        <h4>Khoa</h4>
+        
+        <div class="field">
+            @Html.LabelFor(model => model.ten_khoa,"Tên Khóa", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ten_khoa, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ten_khoa, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="field">
+            @Html.LabelFor(model => model.mo_ta_khoa,"Mô Tả Khoa", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.mo_ta_khoa, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.mo_ta_khoa, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="field">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn1" />
+                @Html.ActionLink("Cancel", "Index", null, new { @class = "btn2" })
+            </div>
+        </div>
+    </div>
+}
+

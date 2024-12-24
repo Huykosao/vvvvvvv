@@ -1,0 +1,43 @@
+﻿@model ManageStudentsV2.Models.Lich_hoc
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_ManageStudentHome.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Lich_hoc</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.thoi_gian)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.thoi_gian)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.phong_hoc)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.phong_hoc)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Lop_hoc_phan.ma_hoc_phan)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Lop_hoc_phan.ma_hoc_phan)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ma_lich }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

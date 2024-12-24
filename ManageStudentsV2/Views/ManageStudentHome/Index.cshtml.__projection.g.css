@@ -1,0 +1,29 @@
+/* BEGIN EXTERNAL SOURCE */
+
+    .dashboard {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 20px;
+    }
+
+    .card {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        padding: 20px;
+        text-align: center;
+        width: 30%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+        .card h3 {
+            margin-bottom: 10px;
+            color: #343a40;
+        }
+
+        .card p {
+            font-size: 24px;
+            color: #007bff;
+        }
+
+/* END EXTERNAL SOURCE */

@@ -1,0 +1,78 @@
+﻿@model ManageStudentsV2.Models.Hoc_sinh
+
+@{
+    ViewBag.Title = "Quản Lý Sinh Viên ";
+    Layout = "~/Views/Shared/_ManageStudentHome.cshtml";
+}
+
+@if (Session["Role"] != null)
+{
+    if (Session["Role"].ToString() == "Student")
+    {
+        <h2>Student Dashboard</h2>
+
+        if (Model != null)
+        {
+            <div class="information-student">
+                <div class="student-id">
+                    MSSV : @Model.ma_sinh_vien
+                </div>
+                <div class="student-name">
+                    Họ Tên : @Model.ten_sinh_vien
+                </div>
+                <div class="student-class">
+                    Lớp : @Model.Lop_chinh.ten_lop
+                </div>
+                <div class="student-major">
+                    Ngành : @Model.Lop_chinh.Nganh.ten_nganh
+                </div>
+                <div class="student-study-year">
+                    Niên Khóa : @Model.Lop_chinh.Nganh.Nien_khoa.ten_nien_khoa
+                </div>
+                <div class="student-department">
+                    Khoa : @Model.Lop_chinh.Nganh.Nien_khoa.Khoa.ten_khoa
+                </div>
+            </div>
+        }
+        else
+        {
+                
+            <p>Khong thay sinh vien @Session["UserId"] </p>
+        }
+        <div class="dashboard">
+            <div class="card">
+                <h3>Total Students</h3>
+                <p>150</p>
+            </div>
+            <div class="card">
+                <h3>New Admissions</h3>
+                <p>30</p>
+            </div>
+            <div class="card">
+                <h3>Graduated</h3>
+                <p>20</p>
+            </div>
+        </div>
+    }
+    else if (Session["Role"].ToString() == "Admin" || Session["Role"].ToString() == "Teacher")
+    {
+        <div class="home-container">
+            <div class="hero">
+                <div class="overlay">
+                    <h1>Chào mừng @Session["Role"] đến với Hệ thống Quản lý Sinh Viên</h1>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+else
+{
+    <div class="home-container">
+        <div class="hero">
+            <div class="overlay">
+                <h1>Chào mừng đến với Hệ thống Quản lý Sinh Viên</h1>
+            </div>
+        </div>
+    </div>
+}

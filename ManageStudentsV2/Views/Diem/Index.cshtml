@@ -1,0 +1,62 @@
+﻿@model PagedList.IPagedList<ManageStudentsV2.Models.Diem>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_ManageStudentHome.cshtml";
+}
+
+<div class="headerAdd">
+    <h2>Danh sách Điểm</h2>
+    <div class="button-add">
+        @Html.ActionLink("+ Nhập Điểm", "Create", null, new { @class = "btnAdd" })
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Điểm Số 1</th>
+            <th>Điểm Số 2</th>
+            <th>Điểm Điểm Cuối Kỳ</th>
+            <th>Tên Sinh Viên</th>
+            <th>Tên Môn</th>
+            <th>Hành Động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.diem_so_1)</td>
+                    <td>@Html.DisplayFor(modelItem => item.diem_so_2)</td>
+                    <td>@Html.DisplayFor(modelItem => item.diem_cuoi_ky)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Hoc_sinh.ten_sinh_vien)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Mon_hoc.ten_mon)</td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { /*id = item.ma_khoa */ }, new { @class = "btnEdit" }) |
+                        @Html.ActionLink("Details", "Details", new { /*id = item.ma_khoa */}, new { @class = "btnDetails" }) |
+                        @Html.ActionLink("Delete", "Delete", new { /*id = item.ma_khoa */ }, new { @class = "btnDelete" })
+
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="3" class="no-data">Không tìm thấy khoa nào phù hợp.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="row">
+    <div class="col">
+        @using (Html.BeginForm("Index", "Diem", FormMethod.Get))
+        {<p> Kích thước trang: @Html.DropDownList("size", (List<SelectListItem>)ViewBag.size, new { @onchange = "this.form.submit();" }) </p>}
+    </div>
+    <div class="col_right"> Trang: @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount </div>
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, size = ViewBag.currentSize }))
+</div>

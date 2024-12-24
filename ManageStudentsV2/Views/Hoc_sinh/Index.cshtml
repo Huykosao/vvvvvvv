@@ -1,0 +1,78 @@
+﻿@model PagedList.IPagedList<ManageStudentsV2.Models.Hoc_sinh>
+@using PagedList.Mvc;
+
+@{
+    ViewBag.Title = "Danh sách Sinh Viên";
+    Layout = "~/Views/Shared/_ManageStudentHome.cshtml";
+}
+
+<div class="headerAdd">
+    <h2>Danh sách Sinh Viên</h2>
+    <div class="button-add">
+
+        @*@using (Html.BeginForm("Index", "Student", FormMethod.Get, new { @class = "search-form" }))
+            {
+                <input type="text" name="q" placeholder="Tìm kiếm sinh viên..." value="@ViewBag.SearchQuery" class="search-input" />
+                <button type="submit" class="search-btn">Tìm kiếm</button>
+            }*@
+        @Html.ActionLink("+ Thêm Sinh Viên", "Create", null, new { @class = "btnAdd" })
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>MSSV</th>
+            <th>Tên</th>
+            @*<th>Ngày Sinh</th>
+                <th>Quê Quán</th>
+                <th>CCCD</th>
+                <th>Số Điện Thoại</th>*@
+            <th>Lớp</th>
+            <th>Ngành</th>
+            <th>Niên khóa </th>
+            <th>Khoa</th>
+            <th>Hành Động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ma_sinh_vien</td>
+                    <td>@item.ten_sinh_vien</td>
+                    <td>@item.Lop_chinh.ten_lop </td>
+                    <td>@item.Lop_chinh.Nganh.ten_nganh</td>
+                    <td>@item.Lop_chinh.Nganh.Nien_khoa.ten_nien_khoa</td>
+                    <td>@item.Lop_chinh.Nganh.Nien_khoa.Khoa.ten_khoa</td>
+                    <td>
+                        @Html.ActionLink("Edit", "Hoc_sinh", new { id = item.ma_sinh_vien }, new { @class = "btnEdit" }) |
+                        @Html.ActionLink("Delete", "Hoc_sinh", new { id = item.ma_sinh_vien }, new { @class = "btnDelete" })
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="8" class="no-data">Không tìm thấy sinh viên nào phù hợp.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<br />
+<br />
+<!-- Thêm mã phân trang -->
+
+<div class="row">
+    <div class="col">
+        @using (Html.BeginForm("Index", "Hoc_sinh", FormMethod.Get))
+        {<p> Kích thước trang: @Html.DropDownList("size", (List<SelectListItem>)ViewBag.size, new { @onchange = "this.form.submit();" }) </p>}
+    </div>
+    <div class="col_right"> Trang: @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount </div> 
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, size = ViewBag.currentSize }))
+</div>
+
+

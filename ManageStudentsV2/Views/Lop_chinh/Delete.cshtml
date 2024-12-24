@@ -1,0 +1,49 @@
+﻿@model ManageStudentsV2.Models.Lop_chinh
+
+@{
+    ViewBag.Title = "Delete";
+    Layout = "~/Views/Shared/_ManageStudentHome.cshtml";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Lop_chinh</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ten_lop)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ten_lop)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Giao_vien.ten_giao_vien)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Giao_vien.ten_giao_vien)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Nganh.ten_nganh)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nganh.ten_nganh)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

@@ -1,0 +1,37 @@
+﻿@model ManageStudentsV2.Models.LoginViewModel
+
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_ManageStudentHome.cshtml";
+}
+
+<div class="login-container">
+    <div class="group">
+        <div class="loginForm">
+            @using (Html.BeginForm("Index", "Login", FormMethod.Post, new { @class = "login100-form validate-form" }))
+            {
+                <img src="https://media.dau.edu.vn/Media/1_TH1057/Images/logo-dhktdn-150.png">
+                <h2>Member Login</h2>
+                <div class="form-group">
+                    <label for="username">Nhập Tài Khoản:</label>
+                    @Html.TextBoxFor(m => m.Username, new { @class = "input100", placeholder = "Username", @id = "username" })
+                    @Html.ValidationMessageFor(m => m.Username, "", new { @class = "text-danger" })
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Nhập Mật Khẩu:</label>
+                    @Html.PasswordFor(m => m.Password, new { @class = "input100", placeholder = "Password", @id = "password" })
+                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                </div>
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="container-login100-form-btn">
+                    <button type="submit" class="btn-submit">
+                        Login
+                    </button>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,71 @@
+﻿@model ManageStudentsV2.Models.Hoc_sinh
+
+@{
+    ViewBag.Title = "Create Student";
+    Layout = "~/Views/Shared/_ManageStudentHome.cshtml";
+}
+
+
+@using (Html.BeginForm("Create", "Hoc_sinh", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="create-forms">
+        <h4>Thông tin Sinh Viên</h4>
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <!-- Mã Sinh Viên -->
+        @*<div class="field">
+            @Html.LabelFor(model => model.ma_sinh_vien,"Mã Sinh Viên", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ma_sinh_vien, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ma_sinh_vien, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+        <!-- Tên Sinh Viên -->
+        <div class="field">
+            @Html.LabelFor(model => model.ten_sinh_vien,"Tên Sinh Viên", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ten_sinh_vien, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ten_sinh_vien, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- Ngày Sinh -->
+        @*<div class="field">
+            @Html.LabelFor(model => model.ngay_sinh, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ngay_sinh, new { htmlAttributes = new { @class = "form-control", type = "date" } })
+                @Html.ValidationMessageFor(model => model.ngay_sinh, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+
+        <!-- Lớp -->
+        <div class="field">
+            @Html.LabelFor(model => model.ma_lop, "Lớp", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("ma_lop", null, "-- Chọn Lớp --", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ma_lop, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- UserID -->
+        <div class="field">
+            @Html.LabelFor(model => model.UserID, "User", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("UserID", null, "-- Chọn User --", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.UserID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <!-- Nút Submit -->
+        <div class="field">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn1" />
+                @Html.ActionLink("Cancel", "Index", null, new { @class = "btn2" })
+            </div>
+        </div>
+    </div>
+}
+
+

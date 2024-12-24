@@ -1,0 +1,64 @@
+﻿@model PagedList.IPagedList < ManageStudentsV2.Models.LopHocPhanViewModel>
+@using PagedList.Mvc;
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_ManageStudentHome.cshtml";
+}
+
+<div class="headerAdd">
+    <h2>Danh sách Lớp học Phần</h2>
+    <div class="button-add">
+        @Html.ActionLink("+ Thêm Lớp Học Phần", "Create", null, new { @class = "btnAdd" })
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Tên Lớp</th>
+            <th>Tên Môn</th>
+            <th>Giáo Viên </th>
+            <th>Số Sinh Viên</th>
+            <th>Ngành </th>
+            <th>Niên Khóa </th>
+            <th>Khoa</th>
+            <th>Hành Động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.TenLop)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TenMon)</td>
+                    <td>@Html.DisplayFor(modelItem => item.GiaoVien)</td>
+                    <td>@Html.DisplayFor(modelItem => item.SoSinhVien)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Nganh)</td>
+                    <td>@Html.DisplayFor(modelItem => item.NienKhoa)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Khoa)</td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.MaHocPhan }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.MaHocPhan }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.MaHocPhan })
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="3" class="no-data">Không tìm thấy Lớp Học Phần nào phù hợp.</td>
+            </tr>
+        }
+    </tbody>
+</table>
+<div class="row">
+    <div class="col">
+        @using (Html.BeginForm("Index", "Lop_hoc_phan", FormMethod.Get))
+        {<p> Kích thước trang: @Html.DropDownList("size", (List<SelectListItem>)ViewBag.size, new { @onchange = "this.form.submit();" }) </p>}
+    </div>
+    <div class="col_right"> Trang: @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount </div>
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, size = ViewBag.currentSize }))
+</div>

@@ -1,0 +1,35 @@
+﻿@model ManageStudentsV2.Models.Lop_hoc_phan
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_ManageStudentHome.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Lop_hoc_phan</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Lop_chinh.ten_lop)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Lop_chinh.ten_lop)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Mon_hoc.ten_mon)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Mon_hoc.ten_mon)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ma_hoc_phan }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
