@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using ManageStudentsV2.Models;
@@ -45,7 +46,36 @@ namespace ManageStudentsV2.Controllers
 
             return View(mon_hoc.ToPagedList(pageNumber, pageSize));
         }
+        public ActionResult ExportToExcel()
+        {
+            // Lấy danh sách môn học
+            var mon_hoc = db.Mon_hoc
+                            .Include(m => m.Nganh)
+                            .OrderBy(m => m.ma_mon)
+                            .ToList();
 
+            // Tạo nội dung file CSV
+            StringBuilder sb = new StringBuilder();
+
+            // Thêm tiêu đề cột (chấm phẩy làm dấu phân cách)
+            sb.AppendLine("\"Mã Môn\";\"Tên Môn\";\"Mô Tả Môn\";\"Ngành\"");
+
+            // Thêm dữ liệu vào file CSV
+            foreach (var m in mon_hoc)
+            {
+                sb.AppendLine($"\"{m.ma_mon}\";" +
+                              $"\"{m.ten_mon}\";" +
+                              $"\"{m.mo_ta_mon}\";" +
+                              $"\"{m.Nganh?.ten_nganh ?? "N/A"}\"");
+            }
+
+            // Chuyển StringBuilder thành byte array với UTF-8 BOM
+            byte[] fileBytes = Encoding.UTF8.GetPreamble().Concat(Encoding.UTF8.GetBytes(sb.ToString())).ToArray();
+            string fileName = "DanhSachMonHoc.csv";
+
+            // Trả về file CSV
+            return File(fileBytes, "text/csv", fileName);
+        }
         // GET: Mon_hoc/Details/5
         public ActionResult Details(int? id)
         {

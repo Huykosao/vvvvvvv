@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using ManageStudentsV2.Models;
@@ -11,13 +12,14 @@ using PagedList;
 
 namespace ManageStudentsV2.Controllers
 {
-    [RoleAuthorize("Admin")]
+    //[RoleAuthorize("Admin")]
 
     public class Lop_hoc_phanController : Controller
     {
         private Quan_Ly_Sinh_Vien_Entities db = new Quan_Ly_Sinh_Vien_Entities();
 
         // GET: Lop_hoc_phan
+        [RoleAuthorize("Admin")]
         public ActionResult Index(int? size, int? page)
         {
             List<SelectListItem> items = new List<SelectListItem>();
@@ -38,7 +40,7 @@ namespace ManageStudentsV2.Controllers
             var lop_hoc_phan = db.Lop_hoc_phan
                                     .Include(lhp => lhp.Lop_chinh)
                                     .Include(lhp => lhp.Mon_hoc)
-                                    .Include(lhp => lhp.Giao_vien)
+                                    .Include(lhp => lhp.Phan_cong.Select(pc => pc.Giao_vien))
                                     .Select(lhp => new ManageStudentsV2.Models.LopHocPhanViewModel
                                     {
                                         MaHocPhan = lhp.ma_hoc_phan,
@@ -46,7 +48,7 @@ namespace ManageStudentsV2.Controllers
                                         TenLop = lhp.Lop_chinh.ten_lop,
                                         MaMon = lhp.ma_mon,
                                         TenMon = lhp.Mon_hoc.ten_mon,
-                                        GiaoVien = lhp.Giao_vien.FirstOrDefault().ten_giao_vien,
+                                        GiaoVien = lhp.Phan_cong.FirstOrDefault().Giao_vien.ten_giao_vien,
                                         SoSinhVien = db.Lop_dang_ky.Count(ldk => ldk.ma_hoc_phan == lhp.ma_hoc_phan),
                                         Nganh = lhp.Mon_hoc.Nganh.ten_nganh,
                                         NienKhoa = lhp.Mon_hoc.Nganh.Nien_khoa.ten_nien_khoa,
@@ -58,7 +60,42 @@ namespace ManageStudentsV2.Controllers
 
             return View(lop_hoc_phan.ToPagedList(pageNumber, pageSize));
         }
+        public ActionResult ExportToExcel()
+        {
+            // Lấy danh sách lớp học phần
+            var lop_hoc_phan = db.Lop_hoc_phan
+                                 .Include(lhp => lhp.Lop_chinh)
+                                 .Include(lhp => lhp.Mon_hoc)
+                                 .Include(lhp => lhp.Phan_cong.FirstOrDefault().Giao_vien)
+                                 .OrderBy(lhp => lhp.ma_hoc_phan)
+                                 .ToList();
 
+            // Tạo nội dung file CSV
+            StringBuilder sb = new StringBuilder();
+
+            // Thêm tiêu đề cột (chấm phẩy làm dấu phân cách)
+            sb.AppendLine("\"Mã Học Phần\";\"Tên Lớp\";\"Tên Môn\";\"Giáo Viên\";\"Số Sinh Viên\";\"Ngành\";\"Niên Khóa\";\"Khoa\"");
+
+            // Thêm dữ liệu vào file CSV
+            foreach (var lhp in lop_hoc_phan)
+            {
+                sb.AppendLine($"\"{lhp.ma_hoc_phan}\";" +
+                              $"\"{lhp.Lop_chinh?.ten_lop ?? "N/A"}\";" +
+                              $"\"{lhp.Mon_hoc?.ten_mon ?? "N/A"}\";" +
+                              $"\"{lhp.Phan_cong.FirstOrDefault()?.Giao_vien.ten_giao_vien ?? "N/A"}\";" +
+                              $"\"{db.Lop_dang_ky.Count(ldk => ldk.ma_hoc_phan == lhp.ma_hoc_phan)}\";" +
+                              $"\"{lhp.Mon_hoc?.Nganh?.ten_nganh ?? "N/A"}\";" +
+                              $"\"{lhp.Mon_hoc?.Nganh?.Nien_khoa?.ten_nien_khoa ?? "N/A"}\";" +
+                              $"\"{lhp.Mon_hoc?.Nganh?.Nien_khoa?.Khoa?.ten_khoa ?? "N/A"}\"");
+            }
+
+            // Chuyển StringBuilder thành byte array với UTF-8 BOM
+            byte[] fileBytes = Encoding.UTF8.GetPreamble().Concat(Encoding.UTF8.GetBytes(sb.ToString())).ToArray();
+            string fileName = "DanhSachLopHocPhan.csv";
+
+            // Trả về file CSV
+            return File(fileBytes, "text/csv", fileName);
+        }
         // GET: Lop_hoc_phan/Details/5
         public ActionResult Details(int? id)
         {

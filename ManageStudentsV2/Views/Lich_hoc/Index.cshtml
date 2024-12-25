@@ -1,4 +1,4 @@
-﻿@model PagedList.IPagedList<ManageStudentsV2.Models.Lich_hoc>
+﻿@model PagedList.IPagedList<ManageStudentsV2.Models.LichHocViewModel>
 @using PagedList.Mvc;
 
 @{
@@ -10,6 +10,7 @@
 <div class="headerAdd">
     <h2>Danh sách Lịch Dạy</h2>
     <div class="button-add">
+        @Html.ActionLink("Xuất Excel", "ExportToExcel", null, new { @class = "btnAdd" })
         @Html.ActionLink("+ Thêm Lịch Học", "Create", null, new { @class = "btnAdd" })
     </div>
 </div>
@@ -18,31 +19,36 @@
     <thead>
         <tr>
             <th>Thời Gian</th>
+            <th>Môn học</th>
+            <th>Lớp </th>
             <th>Phòng</th>
             <th>Hành Động</th>
         </tr>
     </thead>
     <tbody>
-        @if (Model != null && Model.Any())
+        @if (Model?.Any() == true)
+
         {
-            foreach (var item in Model)
-            {
-                <tr>
-                    <td>@Html.DisplayFor(modelItem => item.thoi_gian)</td>
-                    <td>@Html.DisplayFor(modelItem => item.phong_hoc)</td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = item.ma_lich }) |
-                        @Html.ActionLink("Details", "Details", new { id = item.ma_lich }) |
-                        @Html.ActionLink("Delete", "Delete", new { id = item.ma_lich })
-                    </td>
-                </tr>
-            }
+        foreach (var item in Model)
+        {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.ThoiGian)</td>
+            <td>@Html.DisplayFor(modelItem => item.TenMonHoc)</td>
+            <td>@Html.DisplayFor(modelItem => item.TenLopChinh)</td>
+            <td>@Html.DisplayFor(modelItem => item.PhongHoc)</td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.MaLich }) |
+                @Html.ActionLink("Details", "Details", new { id = item.MaLich }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.MaLich })
+            </td>
+        </tr>
+        }
         }
         else
         {
-            <tr>
-                <td colspan="3" class="no-data">Không tìm thấy lịch nào phù hợp.</td>
-            </tr>
+        <tr>
+            <td colspan="5" class="no-data">Không tìm thấy lịch nào phù hợp.</td>
+        </tr>
         }
     </tbody>
 </table>

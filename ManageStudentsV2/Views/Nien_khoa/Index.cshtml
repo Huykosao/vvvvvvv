@@ -1,4 +1,4 @@
-﻿@model PagedList.IPagedList<ManageStudentsV2.Models.Nien_khoa>
+﻿@model PagedList.IPagedList<ManageStudentsV2.Models.NienKhoaViewModel>
 @using PagedList.Mvc;
 
 @{
@@ -9,6 +9,7 @@
 <div class="headerAdd">
     <h2>Danh sách Niên Khóa</h2>
     <div class="button-add">
+        @Html.ActionLink("Xuất Excel", "ExportToExcel", null, new { @class = "btnAdd" })
         @Html.ActionLink("+ Thêm Niên Khóa", "Create", null, new { @class = "btnAdd" })
     </div>
 </div>
@@ -38,11 +39,11 @@
                 <td>@Html.DisplayFor(modelItem => item.SoLuongNganh)</td>
                 <td>@Html.DisplayFor(modelItem => item.SoLuongHocSinh)</td>
 
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.ma_nien_khoa }, new { @class = "btnEdit" }) |
-                @Html.ActionLink("Details", "Details", new { id = item.ma_nien_khoa }, new { @class = "btnDetails" }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.ma_nien_khoa }, new { @class = "btnDelete" })
-            </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.MaNienKhoa }, new { @class = "btnEdit" }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.MaNienKhoa }, new { @class = "btnDetails" }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.MaNienKhoa }, new { @class = "btnDelete" })
+                </td>
         </tr>
             }
         }

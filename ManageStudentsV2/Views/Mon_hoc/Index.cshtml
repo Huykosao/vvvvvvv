@@ -9,6 +9,7 @@
 <div class="headerAdd">
     <h2>Danh sách Môn Học</h2>
     <div class="button-add">
+        @Html.ActionLink("Xuất Excel", "ExportToExcel", null, new { @class = "btnAdd" })
         @Html.ActionLink("+ Thêm Môn Học", "Create", null, new { @class = "btnAdd" })
     </div>
 </div>

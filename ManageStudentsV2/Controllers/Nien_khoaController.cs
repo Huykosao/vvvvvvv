@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using ManageStudentsV2.Models;
@@ -41,13 +42,15 @@ namespace ManageStudentsV2.Controllers
                                 .Include(n => n.Lop_chinh.Select(l => l.Hoc_sinh))
                                 .GroupBy(nganh => new
                                 {
+                                    nganh.Nien_khoa.ma_nien_khoa,
                                     nganh.Nien_khoa.ten_nien_khoa,
                                     nganh.Nien_khoa.nam_bat_dau,
                                     nganh.Nien_khoa.nam_ket_thuc,
                                     nganh.Nien_khoa.Khoa.ten_khoa
                                 })
-                                .Select(group => new NienKhoaViewModel
+                                .Select(group => new ManageStudentsV2.Models.NienKhoaViewModel
                                 {
+                                    MaNienKhoa = group.Key.ma_nien_khoa,
                                     TenNienKhoa = group.Key.ten_nien_khoa,
                                     NamBatDau = (DateTime)group.Key.nam_bat_dau,
                                     NamKetThuc = (DateTime)group.Key.nam_ket_thuc,
@@ -68,6 +71,37 @@ namespace ManageStudentsV2.Controllers
             return View(nien_khoa.ToPagedList(pageNumber, pageSize));
         }
 
+        public ActionResult ExportToExcel()
+        {
+            // Lấy danh sách niên khóa
+            var nien_khoa = db.Nien_khoa
+                              .Include(n => n.Khoa)
+                              .OrderBy(n => n.ma_nien_khoa)
+                              .ToList();
+
+            // Tạo nội dung file CSV
+            StringBuilder sb = new StringBuilder();
+
+            // Thêm tiêu đề cột (chấm phẩy làm dấu phân cách)
+            sb.AppendLine("\"Mã Niên Khóa\";\"Tên Niên Khóa\";\"Năm Bắt Đầu\";\"Năm Kết Thúc\";\"Khoa\"");
+
+            // Thêm dữ liệu vào file CSV
+            foreach (var n in nien_khoa)
+            {
+                sb.AppendLine($"\"{n.ma_nien_khoa}\";" +
+                              $"\"{n.ten_nien_khoa}\";" +
+                              $"\"{n.nam_bat_dau?.ToString("yyyy") ?? "N/A"}\";" +
+                              $"\"{n.nam_ket_thuc?.ToString("yyyy") ?? "N/A"}\";" +
+                              $"\"{n.Khoa?.ten_khoa ?? "N/A"}\"");
+            }
+
+            // Chuyển StringBuilder thành byte array với UTF-8 BOM
+            byte[] fileBytes = Encoding.UTF8.GetPreamble().Concat(Encoding.UTF8.GetBytes(sb.ToString())).ToArray();
+            string fileName = "DanhSachNienKhoa.csv";
+
+            // Trả về file CSV
+            return File(fileBytes, "text/csv", fileName);
+        }
         // GET: Nien_khoa/Details/5
         [RoleAuthorize("Admin")]
 

@@ -1,0 +1,24 @@
+﻿
+@{
+    ViewBag.Title = "ExportToExcel";
+    Layout = "~/Views/Shared/_ManageStudentHome.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-6">
+        @using (Html.BeginForm("Index", "Giao_vien", FormMethod.Get))
+        {
+            <p>
+                Kích thước trang:
+                @Html.DropDownList("size", (List<SelectListItem>)ViewBag.size, new { @onchange = "this.form.submit();" })
+            </p>
+        }
+    </div>
+
+    <div class="col-md-6 text-right">
+        <p>
+            Trang: @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount
+            @Html.ActionLink("Xuất Excel", "ExportToExcel", null, new { @class = "btn btn-success" })
+        </p>
+    </div>
+</div>

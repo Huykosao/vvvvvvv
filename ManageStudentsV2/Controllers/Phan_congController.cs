@@ -10,117 +10,116 @@ using ManageStudentsV2.Models;
 
 namespace ManageStudentsV2.Controllers
 {
-    //[RoleAuthorize("Admin")]
-    public class Lop_dang_kyController : Controller
+    public class Phan_congController : Controller
     {
         private Quan_Ly_Sinh_Vien_Entities db = new Quan_Ly_Sinh_Vien_Entities();
 
-        // GET: Lop_dang_ky
+        // GET: Phan_cong
         public ActionResult Index()
         {
-            var lop_dang_ky = db.Lop_dang_ky.Include(l => l.Hoc_sinh).Include(l => l.Lop_hoc_phan);
-            return View(lop_dang_ky.ToList());
+            var phan_cong = db.Phan_cong.Include(p => p.Giao_vien).Include(p => p.Lop_hoc_phan);
+            return View(phan_cong.ToList());
         }
 
-        // GET: Lop_dang_ky/Details/5
+        // GET: Phan_cong/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Lop_dang_ky lop_dang_ky = db.Lop_dang_ky.Find(id);
-            if (lop_dang_ky == null)
+            Phan_cong phan_cong = db.Phan_cong.Find(id);
+            if (phan_cong == null)
             {
                 return HttpNotFound();
             }
-            return View(lop_dang_ky);
+            return View(phan_cong);
         }
 
-        // GET: Lop_dang_ky/Create
+        // GET: Phan_cong/Create
         public ActionResult Create()
         {
-            ViewBag.ma_sinh_vien = new SelectList(db.Hoc_sinh, "ma_sinh_vien", "ten_sinh_vien");
+            ViewBag.ma_giao_vien = new SelectList(db.Giao_vien, "ma_giao_vien", "ten_giao_vien");
             ViewBag.ma_hoc_phan = new SelectList(db.Lop_hoc_phan, "ma_hoc_phan", "ma_hoc_phan");
             return View();
         }
 
-        // POST: Lop_dang_ky/Create
+        // POST: Phan_cong/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ma_sinh_vien,ma_hoc_phan,ngay_dk")] Lop_dang_ky lop_dang_ky)
+        public ActionResult Create([Bind(Include = "ma_giao_vien,ma_hoc_phan,ngay_bat_dau,ngay_ket_thuc")] Phan_cong phan_cong)
         {
             if (ModelState.IsValid)
             {
-                db.Lop_dang_ky.Add(lop_dang_ky);
+                db.Phan_cong.Add(phan_cong);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.ma_sinh_vien = new SelectList(db.Hoc_sinh, "ma_sinh_vien", "ten_sinh_vien", lop_dang_ky.ma_sinh_vien);
-            ViewBag.ma_hoc_phan = new SelectList(db.Lop_hoc_phan, "ma_hoc_phan", "ma_hoc_phan", lop_dang_ky.ma_hoc_phan);
-            return View(lop_dang_ky);
+            ViewBag.ma_giao_vien = new SelectList(db.Giao_vien, "ma_giao_vien", "ten_giao_vien", phan_cong.ma_giao_vien);
+            ViewBag.ma_hoc_phan = new SelectList(db.Lop_hoc_phan, "ma_hoc_phan", "ma_hoc_phan", phan_cong.ma_hoc_phan);
+            return View(phan_cong);
         }
 
-        // GET: Lop_dang_ky/Edit/5
+        // GET: Phan_cong/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Lop_dang_ky lop_dang_ky = db.Lop_dang_ky.Find(id);
-            if (lop_dang_ky == null)
+            Phan_cong phan_cong = db.Phan_cong.Find(id);
+            if (phan_cong == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.ma_sinh_vien = new SelectList(db.Hoc_sinh, "ma_sinh_vien", "ten_sinh_vien", lop_dang_ky.ma_sinh_vien);
-            ViewBag.ma_hoc_phan = new SelectList(db.Lop_hoc_phan, "ma_hoc_phan", "ma_hoc_phan", lop_dang_ky.ma_hoc_phan);
-            return View(lop_dang_ky);
+            ViewBag.ma_giao_vien = new SelectList(db.Giao_vien, "ma_giao_vien", "ten_giao_vien", phan_cong.ma_giao_vien);
+            ViewBag.ma_hoc_phan = new SelectList(db.Lop_hoc_phan, "ma_hoc_phan", "ma_hoc_phan", phan_cong.ma_hoc_phan);
+            return View(phan_cong);
         }
 
-        // POST: Lop_dang_ky/Edit/5
+        // POST: Phan_cong/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ma_sinh_vien,ma_hoc_phan,ngay_dk")] Lop_dang_ky lop_dang_ky)
+        public ActionResult Edit([Bind(Include = "ma_giao_vien,ma_hoc_phan,ngay_bat_dau,ngay_ket_thuc")] Phan_cong phan_cong)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(lop_dang_ky).State = EntityState.Modified;
+                db.Entry(phan_cong).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.ma_sinh_vien = new SelectList(db.Hoc_sinh, "ma_sinh_vien", "ten_sinh_vien", lop_dang_ky.ma_sinh_vien);
-            ViewBag.ma_hoc_phan = new SelectList(db.Lop_hoc_phan, "ma_hoc_phan", "ma_hoc_phan", lop_dang_ky.ma_hoc_phan);
-            return View(lop_dang_ky);
+            ViewBag.ma_giao_vien = new SelectList(db.Giao_vien, "ma_giao_vien", "ten_giao_vien", phan_cong.ma_giao_vien);
+            ViewBag.ma_hoc_phan = new SelectList(db.Lop_hoc_phan, "ma_hoc_phan", "ma_hoc_phan", phan_cong.ma_hoc_phan);
+            return View(phan_cong);
         }
 
-        // GET: Lop_dang_ky/Delete/5
+        // GET: Phan_cong/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Lop_dang_ky lop_dang_ky = db.Lop_dang_ky.Find(id);
-            if (lop_dang_ky == null)
+            Phan_cong phan_cong = db.Phan_cong.Find(id);
+            if (phan_cong == null)
             {
                 return HttpNotFound();
             }
-            return View(lop_dang_ky);
+            return View(phan_cong);
         }
 
-        // POST: Lop_dang_ky/Delete/5
+        // POST: Phan_cong/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Lop_dang_ky lop_dang_ky = db.Lop_dang_ky.Find(id);
-            db.Lop_dang_ky.Remove(lop_dang_ky);
+            Phan_cong phan_cong = db.Phan_cong.Find(id);
+            db.Phan_cong.Remove(phan_cong);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

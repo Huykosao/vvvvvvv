@@ -44,6 +44,8 @@
                                 <li><a href="@Url.Action("Index", "Mon_hoc")">Danh Sách Các Môn Học</a></li>
                                 <li><a href="@Url.Action("Index", "Nganh")">Danh Sách Các Ngành</a></li>
                                 <li><a href="@Url.Action("Index", "Khoa")">Danh Sách Các Khoa</a></li>
+                                <li><a href="@Url.Action("Index", "Lich_hoc")">Tạo lịch học</a></li>
+                               
                             </ul>
                         </nav>
                     }
@@ -58,7 +60,8 @@
                     @if (Session["Role"].ToString() == "Student")
                     {
                         <li><a href="@Url.Action("Index", "Mon_hoc")">Danh sách Môn học</a></li>
-                        <li><a href="@Url.Action("Index", "Lop_hoc_phan")">Lớp học phần đã đăng ký</a></li>
+                        <li><a href="@Url.Action("Index", "Lop_dang_ky")">Lớp học phần đã đăng ký</a></li>
+                        <li><a href="@Url.Action("Index", "Lop_hoc_phan")">Đăng ký học phần</a></li>
                         <li><a href="@Url.Action("Index", "Diem")">Xem điểm</a></li>
                         <li><a href="@Url.Action("Index", "Lich_hoc")">Lịch học</a></li>
                     }

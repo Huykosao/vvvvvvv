@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Mvc;
 using PagedList;
 using ManageStudentsV2.Models;
+using System.Text;
 
 
 namespace ManageStudentsV2.Controllers
@@ -43,7 +44,36 @@ namespace ManageStudentsV2.Controllers
 
             return View(nganhs.ToPagedList(pageNumber, pageSize));
         }
+        public ActionResult ExportToExcel()
+        {
+            // Lấy danh sách ngành
+            var nganh = db.Nganhs
+                          .Include(n => n.Nien_khoa)
+                          .OrderBy(n => n.ma_nganh)
+                          .ToList();
 
+            // Tạo nội dung file CSV
+            StringBuilder sb = new StringBuilder();
+
+            // Thêm tiêu đề cột (chấm phẩy làm dấu phân cách)
+            sb.AppendLine("\"Mã Ngành\";\"Tên Ngành\";\"Mô Tả Ngành\";\"Niên Khóa\"");
+
+            // Thêm dữ liệu vào file CSV
+            foreach (var n in nganh)
+            {
+                sb.AppendLine($"\"{n.ma_nganh}\";" +
+                              $"\"{n.ten_nganh}\";" +
+                              $"\"{n.mo_ta_nganh}\";" +
+                              $"\"{n.Nien_khoa?.ten_nien_khoa ?? "N/A"}\"");
+            }
+
+            // Chuyển StringBuilder thành byte array với UTF-8 BOM
+            byte[] fileBytes = Encoding.UTF8.GetPreamble().Concat(Encoding.UTF8.GetBytes(sb.ToString())).ToArray();
+            string fileName = "DanhSachNganh.csv";
+
+            // Trả về file CSV
+            return File(fileBytes, "text/csv", fileName);
+        }
         // GET: Nganh/Details/5
         public ActionResult Details(int? id)
         {

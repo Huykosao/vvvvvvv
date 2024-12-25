@@ -1,0 +1,51 @@
+﻿@model ManageStudentsV2.Models.Phan_cong
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_ManageStudentHome.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Phan_cong</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ngay_bat_dau)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ngay_bat_dau)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ngay_ket_thuc)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ngay_ket_thuc)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Giao_vien.ten_giao_vien)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Giao_vien.ten_giao_vien)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Lop_hoc_phan.ma_hoc_phan)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Lop_hoc_phan.ma_hoc_phan)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

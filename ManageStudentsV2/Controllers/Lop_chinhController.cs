@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Drawing.Printing;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using ManageStudentsV2.Models;
@@ -55,6 +56,40 @@ namespace ManageStudentsV2.Controllers
             int pageNumber = (page ?? 1);
 
             return View(lop_chinh.ToPagedList(pageNumber, pageSize));
+        }
+        public ActionResult ExportToExcel()
+        {
+            // Lấy danh sách lớp chính
+            var lop_chinh = db.Lop_chinh
+                              .Include(l => l.Giao_vien)
+                              .Include(l => l.Nganh.Nien_khoa.Khoa)
+                              .OrderBy(l => l.ma_lop)
+                              .ToList();
+
+            // Tạo nội dung file CSV
+            StringBuilder sb = new StringBuilder();
+
+            // Thêm tiêu đề cột (chấm phẩy làm dấu phân cách)
+            sb.AppendLine("\"Mã Lớp\";\"Tên Lớp\";\"Giáo Viên Chủ Nhiệm\";\"Ngành\";\"Niên Khóa\";\"Khoa\";\"Số Lượng Học Sinh\"");
+
+            // Thêm dữ liệu vào file CSV
+            foreach (var l in lop_chinh)
+            {
+                sb.AppendLine($"\"{l.ma_lop}\";" +
+                              $"\"{l.ten_lop}\";" +
+                              $"\"{l.Giao_vien?.ten_giao_vien ?? "N/A"}\";" +
+                              $"\"{l.Nganh?.ten_nganh ?? "N/A"}\";" +
+                              $"\"{l.Nganh?.Nien_khoa?.ten_nien_khoa ?? "N/A"}\";" +
+                              $"\"{l.Nganh?.Nien_khoa?.Khoa?.ten_khoa ?? "N/A"}\";" +
+                              $"\"{db.Hoc_sinh.Count(hs => hs.ma_lop == l.ma_lop)}\"");
+            }
+
+            // Chuyển StringBuilder thành byte array với UTF-8 BOM
+            byte[] fileBytes = Encoding.UTF8.GetPreamble().Concat(Encoding.UTF8.GetBytes(sb.ToString())).ToArray();
+            string fileName = "DanhSachLopChinh.csv";
+
+            // Trả về file CSV
+            return File(fileBytes, "text/csv", fileName);
         }
 
         // GET: Lop_chinh/Details/5

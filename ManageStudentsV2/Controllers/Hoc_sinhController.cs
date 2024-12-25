@@ -8,6 +8,8 @@ using System.Web;
 using System.Web.Mvc;
 using PagedList;
 using ManageStudentsV2.Models;
+using System.Text;
+using WebGrease.Activities;
 
 namespace ManageStudentsV2.Controllers
 {
@@ -38,7 +40,7 @@ namespace ManageStudentsV2.Controllers
             var hoc_sinh = db.Hoc_sinh
                                 .Include(h => h.Lop_chinh.Nganh.Nien_khoa.Khoa) // Gồm các liên kết bảng
                                 .Include(h => h.User) // Bao gồm thông tin tài khoản người dùng
-                                .OrderBy(h => h.ten_sinh_vien) // Thêm sắp xếp để đảm bảo thứ tự nhất quán
+                                .OrderBy(h => h.ma_sinh_vien) // Thêm sắp xếp để đảm bảo thứ tự nhất quán
                                 .ToList();
             int pageSize = (size ?? 5);
             
@@ -59,6 +61,39 @@ namespace ManageStudentsV2.Controllers
             //                   Nien_khoa = nien_khoa,
             //                   Khoa = khoa,
             //               };
+        }
+        //in excel
+        public ActionResult ExportToExcel()
+        {
+            // Lấy danh sách sinh viên
+            var hoc_sinh = db.Hoc_sinh
+                             .Include(h => h.Lop_chinh.Nganh.Nien_khoa.Khoa)
+                             .OrderBy(h => h.ma_sinh_vien)
+                             .ToList();
+
+            // Tạo nội dung file CSV
+            StringBuilder sb = new StringBuilder();
+
+            // Thêm tiêu đề cột (chấm phẩy làm dấu phân cách)
+            sb.AppendLine("\"MSSV\";\"Tên Sinh Viên\";\"Lớp\";\"Ngành\";\"Niên Khóa\";\"Khoa\"");
+
+            // Thêm dữ liệu vào file CSV
+            foreach (var hs in hoc_sinh)
+            {
+                sb.AppendLine($"\"{hs.ma_sinh_vien}\";" +
+                              $"\"{hs.ten_sinh_vien}\";" +
+                              $"\"{hs.Lop_chinh?.ten_lop ?? "N/A"}\";" +
+                              $"\"{hs.Lop_chinh?.Nganh?.ten_nganh ?? "N/A"}\";" +
+                              $"\"{hs.Lop_chinh?.Nganh?.Nien_khoa?.ten_nien_khoa ?? "N/A"}\";" +
+                              $"\"{hs.Lop_chinh?.Nganh?.Nien_khoa?.Khoa?.ten_khoa ?? "N/A"}\"");
+            }
+
+            // Chuyển StringBuilder thành byte array với UTF-8 BOM
+            byte[] fileBytes = Encoding.UTF8.GetPreamble().Concat(Encoding.UTF8.GetBytes(sb.ToString())).ToArray();
+            string fileName = "DanhSachSinhVien.csv";
+
+            // Trả về file CSV
+            return File(fileBytes, "text/csv", fileName);
         }
 
         // GET: Hoc_sinh/Details/5
@@ -172,6 +207,8 @@ namespace ManageStudentsV2.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
+
 
 
         protected override void Dispose(bool disposing)

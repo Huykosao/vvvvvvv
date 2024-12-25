@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="Quan_Ly_Sinh_Vien_Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="Quan_Ly_Sinh_Vien_Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Diem">
           <Key>
             <PropertyRef Name="ma_sinh_vien" />
@@ -112,6 +112,8 @@
           </Key>
           <Property Name="ma_giao_vien" Type="int" Nullable="false" />
           <Property Name="ma_hoc_phan" Type="int" Nullable="false" />
+          <Property Name="ngay_bat_dau" Type="datetime" />
+          <Property Name="ngay_ket_thuc" Type="datetime" />
         </EntityType>
         <EntityType Name="Roles">
           <Key>
@@ -449,7 +451,8 @@
             <End Role="Phan_cong" EntitySet="Phan_cong" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="Quan_Ly_Sinh_Vien_Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -477,7 +480,7 @@
           <NavigationProperty Name="Khoa" Relationship="Self.fk_giaovien_khoa" FromRole="Giao_vien" ToRole="Khoa" />
           <NavigationProperty Name="Lop_chinh" Relationship="Self.fk_lop_giaovien" FromRole="Giao_vien" ToRole="Lop_chinh" />
           <NavigationProperty Name="User" Relationship="Self.fk_magiao_users" FromRole="Giao_vien" ToRole="Users" />
-          <NavigationProperty Name="Lop_hoc_phan" Relationship="Self.Phan_cong" FromRole="Giao_vien" ToRole="Lop_hoc_phan" />
+          <NavigationProperty Name="Phan_cong" Relationship="Self.fk_phancong_giaovien" FromRole="Giao_vien" ToRole="Phan_cong" />
         </EntityType>
         <EntityType Name="Hoc_sinh">
           <Key>
@@ -547,7 +550,7 @@
           <NavigationProperty Name="Lop_chinh" Relationship="Self.fk_lophocphan_lopchinh" FromRole="Lop_hoc_phan" ToRole="Lop_chinh" />
           <NavigationProperty Name="Lop_dang_ky" Relationship="Self.fk_lopdangky_lophocphan" FromRole="Lop_hoc_phan" ToRole="Lop_dang_ky" />
           <NavigationProperty Name="Mon_hoc" Relationship="Self.fk_lophocphan_mon" FromRole="Lop_hoc_phan" ToRole="Mon_hoc" />
-          <NavigationProperty Name="Giao_vien" Relationship="Self.Phan_cong" FromRole="Lop_hoc_phan" ToRole="Giao_vien" />
+          <NavigationProperty Name="Phan_cong" Relationship="Self.fk_phancong_lophocphan" FromRole="Lop_hoc_phan" ToRole="Phan_cong" />
         </EntityType>
         <EntityType Name="Mon_hoc">
           <Key>
@@ -556,10 +559,10 @@
           <Property Name="ma_mon" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ten_mon" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="mo_ta_mon" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ma_nganh" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Diems" Relationship="Self.fk_diem_monhoc" FromRole="Mon_hoc" ToRole="Diem" />
           <NavigationProperty Name="Lop_hoc_phan" Relationship="Self.fk_lophocphan_mon" FromRole="Mon_hoc" ToRole="Lop_hoc_phan" />
-          <Property Name="ma_nganh" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Nganh" Relationship="Quan_Ly_Sinh_Vien_Model.fk_monhoc_nganh" FromRole="Mon_hoc" ToRole="Nganh" />
+          <NavigationProperty Name="Nganh" Relationship="Self.fk_monhoc_nganh" FromRole="Mon_hoc" ToRole="Nganh" />
         </EntityType>
         <EntityType Name="Nganh">
           <Key>
@@ -570,8 +573,8 @@
           <Property Name="mo_ta_nganh" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="ma_nien_khoa" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Lop_chinh" Relationship="Self.fk_lop_nganh" FromRole="Nganh" ToRole="Lop_chinh" />
+          <NavigationProperty Name="Mon_hoc" Relationship="Self.fk_monhoc_nganh" FromRole="Nganh" ToRole="Mon_hoc" />
           <NavigationProperty Name="Nien_khoa" Relationship="Self.fk_nganh_nienkhoa" FromRole="Nganh" ToRole="Nien_khoa" />
-          <NavigationProperty Name="Mon_hoc" Relationship="Quan_Ly_Sinh_Vien_Model.fk_monhoc_nganh" FromRole="Nganh" ToRole="Mon_hoc" />
         </EntityType>
         <EntityType Name="Nien_khoa">
           <Key>
@@ -584,6 +587,18 @@
           <Property Name="ma_khoa" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Khoa" Relationship="Self.fk_nienkhoa_khoa" FromRole="Nien_khoa" ToRole="Khoa" />
           <NavigationProperty Name="Nganhs" Relationship="Self.fk_nganh_nienkhoa" FromRole="Nien_khoa" ToRole="Nganh" />
+        </EntityType>
+        <EntityType Name="Phan_cong">
+          <Key>
+            <PropertyRef Name="ma_giao_vien" />
+            <PropertyRef Name="ma_hoc_phan" />
+          </Key>
+          <Property Name="ma_giao_vien" Type="Int32" Nullable="false" />
+          <Property Name="ma_hoc_phan" Type="Int32" Nullable="false" />
+          <Property Name="ngay_bat_dau" Type="DateTime" Precision="3" />
+          <Property Name="ngay_ket_thuc" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Giao_vien" Relationship="Self.fk_phancong_giaovien" FromRole="Phan_cong" ToRole="Giao_vien" />
+          <NavigationProperty Name="Lop_hoc_phan" Relationship="Self.fk_phancong_lophocphan" FromRole="Phan_cong" ToRole="Lop_hoc_phan" />
         </EntityType>
         <EntityType Name="Role">
           <Key>
@@ -662,6 +677,18 @@
             </Principal>
             <Dependent Role="Giao_vien">
               <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_phancong_giaovien">
+          <End Role="Giao_vien" Type="Self.Giao_vien" Multiplicity="1" />
+          <End Role="Phan_cong" Type="Self.Phan_cong" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Giao_vien">
+              <PropertyRef Name="ma_giao_vien" />
+            </Principal>
+            <Dependent Role="Phan_cong">
+              <PropertyRef Name="ma_giao_vien" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -773,6 +800,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="fk_phancong_lophocphan">
+          <End Role="Lop_hoc_phan" Type="Self.Lop_hoc_phan" Multiplicity="1" />
+          <End Role="Phan_cong" Type="Self.Phan_cong" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Lop_hoc_phan">
+              <PropertyRef Name="ma_hoc_phan" />
+            </Principal>
+            <Dependent Role="Phan_cong">
+              <PropertyRef Name="ma_hoc_phan" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_monhoc_nganh">
+          <End Role="Nganh" Type="Self.Nganh" Multiplicity="1" />
+          <End Role="Mon_hoc" Type="Self.Mon_hoc" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Nganh">
+              <PropertyRef Name="ma_nganh" />
+            </Principal>
+            <Dependent Role="Mon_hoc">
+              <PropertyRef Name="ma_nganh" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="fk_nganh_nienkhoa">
           <End Role="Nien_khoa" Type="Self.Nien_khoa" Multiplicity="1" />
           <End Role="Nganh" Type="Self.Nganh" Multiplicity="*" />
@@ -797,10 +848,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="Phan_cong">
-          <End Role="Giao_vien" Type="Self.Giao_vien" Multiplicity="*" />
-          <End Role="Lop_hoc_phan" Type="Self.Lop_hoc_phan" Multiplicity="*" />
-        </Association>
         <EntityContainer Name="Quan_Ly_Sinh_Vien_Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Diems" EntityType="Self.Diem" />
           <EntitySet Name="Giao_vien" EntityType="Self.Giao_vien" />
@@ -813,6 +860,7 @@
           <EntitySet Name="Mon_hoc" EntityType="Self.Mon_hoc" />
           <EntitySet Name="Nganhs" EntityType="Self.Nganh" />
           <EntitySet Name="Nien_khoa" EntityType="Self.Nien_khoa" />
+          <EntitySet Name="Phan_cong" EntityType="Self.Phan_cong" />
           <EntitySet Name="Roles" EntityType="Self.Role" />
           <EntitySet Name="Users" EntityType="Self.User" />
           <AssociationSet Name="fk_diem_hocsinh" Association="Self.fk_diem_hocsinh">
@@ -834,6 +882,10 @@
           <AssociationSet Name="fk_magiao_users" Association="Self.fk_magiao_users">
             <End Role="Users" EntitySet="Users" />
             <End Role="Giao_vien" EntitySet="Giao_vien" />
+          </AssociationSet>
+          <AssociationSet Name="fk_phancong_giaovien" Association="Self.fk_phancong_giaovien">
+            <End Role="Giao_vien" EntitySet="Giao_vien" />
+            <End Role="Phan_cong" EntitySet="Phan_cong" />
           </AssociationSet>
           <AssociationSet Name="fk_hocsinh_lop" Association="Self.fk_hocsinh_lop">
             <End Role="Lop_chinh" EntitySet="Lop_chinh" />
@@ -871,6 +923,14 @@
             <End Role="Mon_hoc" EntitySet="Mon_hoc" />
             <End Role="Lop_hoc_phan" EntitySet="Lop_hoc_phan" />
           </AssociationSet>
+          <AssociationSet Name="fk_phancong_lophocphan" Association="Self.fk_phancong_lophocphan">
+            <End Role="Lop_hoc_phan" EntitySet="Lop_hoc_phan" />
+            <End Role="Phan_cong" EntitySet="Phan_cong" />
+          </AssociationSet>
+          <AssociationSet Name="fk_monhoc_nganh" Association="Self.fk_monhoc_nganh">
+            <End Role="Nganh" EntitySet="Nganhs" />
+            <End Role="Mon_hoc" EntitySet="Mon_hoc" />
+          </AssociationSet>
           <AssociationSet Name="fk_nganh_nienkhoa" Association="Self.fk_nganh_nienkhoa">
             <End Role="Nien_khoa" EntitySet="Nien_khoa" />
             <End Role="Nganh" EntitySet="Nganhs" />
@@ -879,27 +939,7 @@
             <End Role="Roles" EntitySet="Roles" />
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
-          <AssociationSet Name="Phan_cong" Association="Self.Phan_cong">
-            <End Role="Giao_vien" EntitySet="Giao_vien" />
-            <End Role="Lop_hoc_phan" EntitySet="Lop_hoc_phan" />
-          </AssociationSet>
-          <AssociationSet Name="fk_monhoc_nganh" Association="Quan_Ly_Sinh_Vien_Model.fk_monhoc_nganh">
-            <End Role="Nganh" EntitySet="Nganhs" />
-            <End Role="Mon_hoc" EntitySet="Mon_hoc" />
-          </AssociationSet>
         </EntityContainer>
-        <Association Name="fk_monhoc_nganh">
-          <End Type="Quan_Ly_Sinh_Vien_Model.Nganh" Role="Nganh" Multiplicity="1" />
-          <End Type="Quan_Ly_Sinh_Vien_Model.Mon_hoc" Role="Mon_hoc" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Nganh">
-              <PropertyRef Name="ma_nganh" />
-            </Principal>
-            <Dependent Role="Mon_hoc">
-              <PropertyRef Name="ma_nganh" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -987,10 +1027,10 @@
           <EntitySetMapping Name="Mon_hoc">
             <EntityTypeMapping TypeName="Quan_Ly_Sinh_Vien_Model.Mon_hoc">
               <MappingFragment StoreEntitySet="Mon_hoc">
-                <ScalarProperty Name="ma_nganh" ColumnName="ma_nganh" />
                 <ScalarProperty Name="ma_mon" ColumnName="ma_mon" />
                 <ScalarProperty Name="ten_mon" ColumnName="ten_mon" />
                 <ScalarProperty Name="mo_ta_mon" ColumnName="mo_ta_mon" />
+                <ScalarProperty Name="ma_nganh" ColumnName="ma_nganh" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1015,6 +1055,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Phan_cong">
+            <EntityTypeMapping TypeName="Quan_Ly_Sinh_Vien_Model.Phan_cong">
+              <MappingFragment StoreEntitySet="Phan_cong">
+                <ScalarProperty Name="ma_giao_vien" ColumnName="ma_giao_vien" />
+                <ScalarProperty Name="ma_hoc_phan" ColumnName="ma_hoc_phan" />
+                <ScalarProperty Name="ngay_bat_dau" ColumnName="ngay_bat_dau" />
+                <ScalarProperty Name="ngay_ket_thuc" ColumnName="ngay_ket_thuc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Roles">
             <EntityTypeMapping TypeName="Quan_Ly_Sinh_Vien_Model.Role">
               <MappingFragment StoreEntitySet="Roles">
@@ -1033,14 +1083,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="Phan_cong" TypeName="Quan_Ly_Sinh_Vien_Model.Phan_cong" StoreEntitySet="Phan_cong">
-            <EndProperty Name="Giao_vien">
-              <ScalarProperty Name="ma_giao_vien" ColumnName="ma_giao_vien" />
-            </EndProperty>
-            <EndProperty Name="Lop_hoc_phan">
-              <ScalarProperty Name="ma_hoc_phan" ColumnName="ma_hoc_phan" />
-            </EndProperty>
-          </AssociationSetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

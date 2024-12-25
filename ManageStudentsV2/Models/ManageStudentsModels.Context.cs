@@ -36,6 +36,7 @@ namespace ManageStudentsV2.Models
         public virtual DbSet<Mon_hoc> Mon_hoc { get; set; }
         public virtual DbSet<Nganh> Nganhs { get; set; }
         public virtual DbSet<Nien_khoa> Nien_khoa { get; set; }
+        public virtual DbSet<Phan_cong> Phan_cong { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<User> Users { get; set; }
     }

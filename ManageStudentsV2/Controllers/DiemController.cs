@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using ManageStudentsV2.Models;
@@ -43,6 +44,31 @@ namespace ManageStudentsV2.Controllers
             int pageNumber = (page ?? 1);
 
             return View(diems.ToPagedList(pageNumber, pageSize));
+        }
+        public ActionResult ExportToExcel()
+        {
+            // Lấy danh sách điểm
+            var diem = db.Diems
+                          .Include(d => d.Hoc_sinh)
+                          .Include(d => d.Mon_hoc)
+                          .OrderBy(d => d.ma_sinh_vien)
+                          .ToList();
+            // Tạo nội dung file CSV
+            StringBuilder sb = new StringBuilder();
+            // Thêm tiêu đề cột (chấm phẩy làm dấu phân cách)
+            sb.AppendLine("\"Mã Sinh Viên\";\"Mã Môn\";\"Điểm Số 1\";\"Điểm Số 2\";\"Điểm Cuối Kỳ\"");
+            // Thêm dữ liệu vào file CSV
+            foreach (var d in diem)
+            {
+                sb.AppendLine(string.Format("\"{0}\";\"{1}\";\"{2}\";\"{3}\";\"{4}\"",
+                    d.ma_sinh_vien,
+                    d.ma_mon,
+                    d.diem_so_1,
+                    d.diem_so_2,
+                    d.diem_cuoi_ky));
+            }
+            // Return file CSV
+            return File(new System.Text.UTF8Encoding().GetBytes(sb.ToString()), "text/csv", "Diem.csv");
         }
         // GET: Diem/Details/5
         public ActionResult Details(int? id)

@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using ManageStudentsV2.Models;
@@ -12,7 +13,6 @@ using PagedList;
 namespace ManageStudentsV2.Controllers
 {
     [RoleAuthorize("Admin")]
-
     public class KhoaController : Controller
     {
         private Quan_Ly_Sinh_Vien_Entities db = new Quan_Ly_Sinh_Vien_Entities();
@@ -43,7 +43,34 @@ namespace ManageStudentsV2.Controllers
 
             return View(khoa.ToPagedList(pageNumber, pageSize));
         }
+        public ActionResult ExportToExcel()
+        {
+            // Lấy danh sách khoa
+            var khoa = db.Khoas
+                         .OrderBy(k => k.ma_khoa)
+                         .ToList();
 
+            // Tạo nội dung file CSV
+            StringBuilder sb = new StringBuilder();
+
+            // Thêm tiêu đề cột (chấm phẩy làm dấu phân cách)
+            sb.AppendLine("\"Mã Khoa\";\"Tên Khoa\";\"Mô Tả Khoa\"");
+
+            // Thêm dữ liệu vào file CSV
+            foreach (var k in khoa)
+            {
+                sb.AppendLine($"\"{k.ma_khoa}\";" +
+                              $"\"{k.ten_khoa}\";" +
+                              $"\"{k.mo_ta_khoa}\"");
+            }
+
+            // Chuyển StringBuilder thành byte array với UTF-8 BOM
+            byte[] fileBytes = Encoding.UTF8.GetPreamble().Concat(Encoding.UTF8.GetBytes(sb.ToString())).ToArray();
+            string fileName = "DanhSachKhoa.csv";
+
+            // Trả về file CSV
+            return File(fileBytes, "text/csv", fileName);
+        }
         // GET: Khoa/Details/5
         public ActionResult Details(int? id)
         {

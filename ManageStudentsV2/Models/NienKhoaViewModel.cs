@@ -2,6 +2,7 @@
 {
     public class NienKhoaViewModel
     {
+        public int MaNienKhoa { get; set; }
         public string TenNienKhoa { get; set; }
         public System.DateTime NamBatDau { get; set; }
         public System.DateTime NamKetThuc { get; set; }

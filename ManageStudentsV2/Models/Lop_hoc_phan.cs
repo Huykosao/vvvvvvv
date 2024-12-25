@@ -19,7 +19,7 @@ namespace ManageStudentsV2.Models
         {
             this.Lich_hoc = new HashSet<Lich_hoc>();
             this.Lop_dang_ky = new HashSet<Lop_dang_ky>();
-            this.Giao_vien = new HashSet<Giao_vien>();
+            this.Phan_cong = new HashSet<Phan_cong>();
         }
     
         public int ma_hoc_phan { get; set; }
@@ -33,6 +33,6 @@ namespace ManageStudentsV2.Models
         public virtual ICollection<Lop_dang_ky> Lop_dang_ky { get; set; }
         public virtual Mon_hoc Mon_hoc { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Giao_vien> Giao_vien { get; set; }
+        public virtual ICollection<Phan_cong> Phan_cong { get; set; }
     }
 }

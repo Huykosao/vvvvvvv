@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Drawing;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.UI;
@@ -36,8 +37,25 @@ namespace ManageStudentsV2.Controllers
             ViewBag.size = items; // ViewBag DropDownList
             ViewBag.currentSize = size; // tạo biến kích thước trang hiện tại
             page = page ?? 1; //if (page == null) page = 1;
-            
-            var lich_hoc = db.Lich_hoc.Include(l => l.Lop_hoc_phan).OrderBy(l => l.ma_lich);
+
+            var lich_hoc = db.Lich_hoc
+                                .Include(lh => lh.Lop_hoc_phan.Mon_hoc) // Bao gồm Mon_hoc
+                                .Select(lh => new ManageStudentsV2.Models.LichHocViewModel
+                                {
+                                    MaLich = lh.ma_lich,
+                                    ThoiGian = (DateTime)lh.thoi_gian,
+                                    PhongHoc = lh.phong_hoc,
+                                    TenLopChinh = db.Lop_chinh
+                                                    .Where(lc => lc.ma_lop == lh.Lop_hoc_phan.ma_lop) 
+                                                    .Select(lc => lc.ten_lop)
+                                                    .FirstOrDefault(), 
+                                    TenMonHoc = lh.Lop_hoc_phan.Mon_hoc.ten_mon
+                                })
+                                .OrderBy(lh => lh.MaLich);
+
+            //var lich_hoc = db.Lich_hoc
+            //                    .Include(l => l.Lop_hoc_phan.Mon_hoc)
+            //                    .OrderBy(l => l.ma_lich);
 
             int pageSize = (size ?? 5);
 
@@ -46,7 +64,41 @@ namespace ManageStudentsV2.Controllers
             
             return View(lich_hoc.ToPagedList(pageNumber, pageSize));
         }
+        public ActionResult ExportToExcel()
+        {
+            // Lấy danh sách lịch học
+            var lich_hoc = db.Lich_hoc
+                             .Include(l => l.Lop_hoc_phan)
+                             .OrderBy(l => l.ma_lich)
+                             .ToList();
 
+            // Tạo nội dung file CSV
+            StringBuilder sb = new StringBuilder();
+
+            // Thêm tiêu đề cột (chấm phẩy làm dấu phân cách)
+            sb.AppendLine("\"Mã Lịch\";\"Thời Gian\";\"Phòng Học\";\"Tên Lớp\";\"Tên Môn\";\"Giáo Viên\";\"Ngành\";\"Niên Khóa\";\"Khoa\"");
+
+            // Thêm dữ liệu vào file CSV
+            foreach (var l in lich_hoc)
+            {
+                sb.AppendLine($"\"{l.ma_lich}\";" +
+                              $"\"{l.thoi_gian?.ToString("dd/MM/yyyy HH:mm") ?? "N/A"}\";" +
+                              $"\"{l.phong_hoc}\";" +
+                              $"\"{l.Lop_hoc_phan?.Lop_chinh?.ten_lop ?? "N/A"}\";" +
+                              $"\"{l.Lop_hoc_phan?.Mon_hoc?.ten_mon ?? "N/A"}\";" +
+                              $"\"{l.Lop_hoc_phan?.Phan_cong.FirstOrDefault()?.Giao_vien.ten_giao_vien ?? "N/A"}\";" +
+                              $"\"{l.Lop_hoc_phan?.Mon_hoc?.Nganh?.ten_nganh ?? "N/A"}\";" +
+                              $"\"{l.Lop_hoc_phan?.Mon_hoc?.Nganh?.Nien_khoa?.ten_nien_khoa ?? "N/A"}\";" +
+                              $"\"{l.Lop_hoc_phan?.Mon_hoc?.Nganh?.Nien_khoa?.Khoa?.ten_khoa ?? "N/A"}\"");
+            }
+
+            // Chuyển StringBuilder thành byte array với UTF-8 BOM
+            byte[] fileBytes = Encoding.UTF8.GetPreamble().Concat(Encoding.UTF8.GetBytes(sb.ToString())).ToArray();
+            string fileName = "DanhSachLichHoc.csv";
+
+            // Trả về file CSV
+            return File(fileBytes, "text/csv", fileName);
+        }
         // GET: Lich_hoc/Details/5
         public ActionResult Details(int? id)
         {
@@ -65,7 +117,17 @@ namespace ManageStudentsV2.Controllers
         // GET: Lich_hoc/Create
         public ActionResult Create()
         {
-            ViewBag.ma_hoc_phan = new SelectList(db.Lop_hoc_phan, "ma_hoc_phan", "ma_hoc_phan");
+            ViewBag.ma_hoc_phan = new SelectList(db.Lop_hoc_phan
+                                                        .Include(lh => lh.Mon_hoc) // Bao gồm Mon_hoc để lấy tên môn học
+                                                        .Include(lh => lh.Lop_chinh) // Bao gồm Lop_chinh để lấy tên lớp
+                                                        .Select(lh => new
+                                                        {
+                                                            ma_hoc_phan = lh.ma_hoc_phan,
+                                                            ten_mon = lh.Mon_hoc.ten_mon, // Lấy tên môn học
+                                                            ten_lop = lh.Lop_chinh.ten_lop,
+                                                            ten_lop_mon = lh.Lop_chinh.ten_lop + " - " + lh.Mon_hoc.ten_mon
+                                                        }),
+                                                        "ma_hoc_phan", "ten_lop_mon"); // Sử dụng "ma_hoc_phan" làm giá trị và "ten_lop" làm tên hiển thị
             return View();
         }
 
@@ -94,14 +156,31 @@ namespace ManageStudentsV2.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+
             Lich_hoc lich_hoc = db.Lich_hoc.Find(id);
             if (lich_hoc == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.ma_hoc_phan = new SelectList(db.Lop_hoc_phan, "ma_hoc_phan", "ma_hoc_phan", lich_hoc.ma_hoc_phan);
+
+            // Tạo SelectList với danh sách lớp học phần bao gồm tên môn và tên lớp
+            ViewBag.ma_hoc_phan = new SelectList(
+                db.Lop_hoc_phan
+                    .Include(lh => lh.Mon_hoc) // Bao gồm Mon_hoc để lấy tên môn học
+                    .Include(lh => lh.Lop_chinh) // Bao gồm Lop_chinh để lấy tên lớp
+                    .Select(lh => new
+                    {
+                        ma_hoc_phan = lh.ma_hoc_phan, // Giá trị của dropdown
+                        ten_lop_mon = lh.Lop_chinh.ten_lop + " - " + lh.Mon_hoc.ten_mon // Tên lớp và môn học kết hợp
+                    }).ToList(),
+                "ma_hoc_phan", // Trường chứa giá trị (value) cho dropdown
+                "ten_lop_mon", // Trường chứa giá trị hiển thị cho dropdown
+                lich_hoc.ma_hoc_phan // Giá trị mặc định được chọn trong dropdown
+            );
+
             return View(lich_hoc);
         }
+
 
         // POST: Lich_hoc/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 

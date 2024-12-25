@@ -15,6 +15,7 @@
                 <input type="text" name="q" placeholder="Tìm kiếm sinh viên..." value="@ViewBag.SearchQuery" class="search-input" />
                 <button type="submit" class="search-btn">Tìm kiếm</button>
             }*@
+        @Html.ActionLink("Xuất Excel", "ExportToExcel", null, new { @class = "btnAdd" })
         @Html.ActionLink("+ Thêm Sinh Viên", "Create", null, new { @class = "btnAdd" })
     </div>
 </div>

@@ -28,8 +28,8 @@ namespace ManageStudentsV2.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Lop_chinh> Lop_chinh { get; set; }
-        public virtual Nien_khoa Nien_khoa { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Mon_hoc> Mon_hoc { get; set; }
+        public virtual Nien_khoa Nien_khoa { get; set; }
     }
 }

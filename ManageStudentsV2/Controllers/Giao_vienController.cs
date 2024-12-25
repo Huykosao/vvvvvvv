@@ -4,6 +4,7 @@ using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using ManageStudentsV2.Models;
@@ -44,6 +45,36 @@ namespace ManageStudentsV2.Controllers
             int pageNumber = (page ?? 1);
 
             return View(giao_vien.ToPagedList(pageNumber, pageSize));
+        }
+        public ActionResult ExportToExcel()
+        {
+            // Lấy danh sách giáo viên
+            var giao_vien = db.Giao_vien
+                              .Include(g => g.Khoa)
+                              .OrderBy(g => g.ma_giao_vien)
+                              .ToList();
+
+            // Tạo nội dung file CSV
+            StringBuilder sb = new StringBuilder();
+
+            // Thêm tiêu đề cột (chấm phẩy làm dấu phân cách)
+            sb.AppendLine("\"Mã GV\";\"Tên Giáo Viên\";\"Khoa\";\"Tên Tài Khoản\"");
+
+            // Thêm dữ liệu vào file CSV
+            foreach (var gv in giao_vien)
+            {
+                sb.AppendLine($"\"{gv.ma_giao_vien}\";" +
+                              $"\"{gv.ten_giao_vien}\";" +
+                              $"\"{gv.Khoa?.ten_khoa ?? "N/A"}\";" +
+                              $"\"{gv.User?.Username ?? "N/A"}\"");
+            }
+
+            // Chuyển StringBuilder thành byte array với UTF-8 BOM
+            byte[] fileBytes = Encoding.UTF8.GetPreamble().Concat(Encoding.UTF8.GetBytes(sb.ToString())).ToArray();
+            string fileName = "DanhSachGiaoVien.csv";
+
+            // Trả về file CSV
+            return File(fileBytes, "text/csv", fileName);
         }
 
         // GET: Giao_vien/Details/5
