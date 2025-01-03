@@ -14,39 +14,52 @@ using WebGrease.Activities;
 namespace ManageStudentsV2.Controllers
 {
     [RoleAuthorize("Admin")]
-   
+
     public class Hoc_sinhController : Controller
     {
         private Quan_Ly_Sinh_Vien_Entities db = new Quan_Ly_Sinh_Vien_Entities();
 
         // GET: Hoc_sinh
-        public ActionResult Index(int? size, int? page)
+        public ActionResult Index(String sortOrder,String currentFilter,String searchString,int? page)
         {
-            List<SelectListItem> items = new List<SelectListItem>();
-            items.Add(new SelectListItem { Text = "5", Value = "5" });
-            items.Add(new SelectListItem { Text = "10", Value = "10" });
-            items.Add(new SelectListItem { Text = "20", Value = "20" });
-            items.Add(new SelectListItem { Text = "25", Value = "25" });
-            items.Add(new SelectListItem { Text = "50", Value = "50" });
-            items.Add(new SelectListItem { Text = "100", Value = "100" });
-            items.Add(new SelectListItem { Text = "200", Value = "200" });
-            foreach (var item in items)
+            ViewBag.currentSort = sortOrder;
+            ViewBag.NameSortParm = sortOrder == "name" ? "name_desc" : "name";
+            if (searchString != null)
             {
-                if (item.Value == size.ToString()) item.Selected = true;
+                page = 1;
             }
-            ViewBag.size = items; // ViewBag DropDownList
-            ViewBag.currentSize = size; // tạo biến kích thước trang hiện tại
-            page = page ?? 1; //if (page == null) page = 1;
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.currentFilter = searchString;
+
             var hoc_sinh = db.Hoc_sinh
                                 .Include(h => h.Lop_chinh.Nganh.Nien_khoa.Khoa) // Gồm các liên kết bảng
                                 .Include(h => h.User) // Bao gồm thông tin tài khoản người dùng
                                 .OrderBy(h => h.ma_sinh_vien) // Thêm sắp xếp để đảm bảo thứ tự nhất quán
                                 .ToList();
-            int pageSize = (size ?? 5);
-            
+            var hoc_sinh_list = hoc_sinh.AsEnumerable();
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                hoc_sinh_list = hoc_sinh_list.Where(h => h.ten_sinh_vien.Contains(searchString));
+            }
+            switch(sortOrder)
+            {
+                case "name":
+                    hoc_sinh_list = hoc_sinh_list.OrderBy(h => h.ten_sinh_vien.Split(' ').LastOrDefault());
+                    break;
+                case "name_desc":
+                    hoc_sinh_list = hoc_sinh_list.OrderByDescending(h => h.ten_sinh_vien.Split(' ').LastOrDefault());
+                    break;
+                default:
+                    hoc_sinh_list = hoc_sinh_list.OrderBy(h => h.ma_sinh_vien);
+                    break;
+            }
+            int pageSize = 10;
             int pageNumber = (page ?? 1);
 
-            return View(hoc_sinh.ToPagedList(pageNumber, pageSize));
+            return View(hoc_sinh_list.ToPagedList(pageNumber, pageSize));
 
             //var Hoc_sinh = from hs in db.Hoc_sinh
             //               join lh in db.Lop_chinh on hs.ma_lop equals lh.ma_lop
@@ -94,24 +107,6 @@ namespace ManageStudentsV2.Controllers
 
             // Trả về file CSV
             return File(fileBytes, "text/csv", fileName);
-        }
-
-        // GET: Hoc_sinh/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            var result = db.Hoc_sinh
-                    .Include(h => h.Lop_chinh.Nganh.Nien_khoa.Khoa) // Nạp các bảng liên quan
-                    .FirstOrDefault(h => h.ma_sinh_vien == id);
-
-            if (result == null)
-            {
-                return HttpNotFound();
-            }
-            return View(result);
         }
 
         // GET: Hoc_sinh/Create
@@ -194,6 +189,7 @@ namespace ManageStudentsV2.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.canh_bao = "Thao tác này sẽ xóa hoc sinh: " + hoc_sinh.ten_sinh_vien + " khỏi các lớp liên quan !!!";
             return View(hoc_sinh);
         }
 
@@ -202,10 +198,37 @@ namespace ManageStudentsV2.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Hoc_sinh hoc_sinh = db.Hoc_sinh.Find(id);
-            db.Hoc_sinh.Remove(hoc_sinh);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            using (var transaction = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    
+                    Hoc_sinh hoc_sinh = db.Hoc_sinh.Find(id);
+                    if (hoc_sinh == null)
+                    {
+                        return HttpNotFound();
+                    }
+
+                    var hocsinh_lopdangky = db.Lop_dang_ky.Where(ldk => ldk.ma_sinh_vien == hoc_sinh.ma_sinh_vien).ToList();
+                    var hocsinh_diem = db.Diems.Where(d => d.ma_sinh_vien == hoc_sinh.ma_sinh_vien).ToList();
+                    db.Diems.RemoveRange(hocsinh_diem);
+                    db.Lop_dang_ky.RemoveRange(hocsinh_lopdangky);
+                    db.Hoc_sinh.Remove(hoc_sinh);
+                    db.SaveChanges();
+                    transaction.Commit();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    Console.WriteLine("Transaction failed: " + ex.Message);
+                    return RedirectToAction("Index");
+                }
+            }
+            //Hoc_sinh hoc_sinh = db.Hoc_sinh.Find(id);
+            //db.Hoc_sinh.Remove(hoc_sinh);
+            //db.SaveChanges();
+            //return RedirectToAction("Index");
         }
 
 

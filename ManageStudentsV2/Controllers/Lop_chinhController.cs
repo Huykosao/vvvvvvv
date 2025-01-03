@@ -21,23 +21,20 @@ namespace ManageStudentsV2.Controllers
         private Quan_Ly_Sinh_Vien_Entities db = new Quan_Ly_Sinh_Vien_Entities();
 
         // GET: Lop_chinh
-        public ActionResult Index(int? size, int? page)
+        public ActionResult Index(String sortOrder,String currentFilter,String searchString,int? page)
         {
-            List<SelectListItem> items = new List<SelectListItem>();
-            items.Add(new SelectListItem { Text = "5", Value = "5" });
-            items.Add(new SelectListItem { Text = "10", Value = "10" });
-            items.Add(new SelectListItem { Text = "20", Value = "20" });
-            items.Add(new SelectListItem { Text = "25", Value = "25" });
-            items.Add(new SelectListItem { Text = "50", Value = "50" });
-            items.Add(new SelectListItem { Text = "100", Value = "100" });
-            items.Add(new SelectListItem { Text = "200", Value = "200" });
-            foreach (var item in items)
+            ViewBag.currentSort = sortOrder;
+            ViewBag.NameSortParm = sortOrder == "name" ? "name_desc" : "name";
+            if(searchString != null)
             {
-                if (item.Value == size.ToString()) item.Selected = true;
+                page = 1;
             }
-            ViewBag.size = items; // ViewBag DropDownList
-            ViewBag.currentSize = size; // tạo biến kích thước trang hiện tại
-            page = page ?? 1; 
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.currentFilter = searchString;
+
             var lop_chinh = db.Lop_chinh
                                     .Include(l => l.Giao_vien)
                                     .Include(l => l.Nganh.Nien_khoa.Khoa)
@@ -51,11 +48,27 @@ namespace ManageStudentsV2.Controllers
                                         NienKhoa = l.Nganh.Nien_khoa.ten_nien_khoa,
                                         Khoa = l.Nganh.Nien_khoa.Khoa.ten_khoa
                                     }).ToList();
-
-            int pageSize = (size ?? 5);
+            var lop_chinh_list = lop_chinh.AsEnumerable();
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                lop_chinh_list = lop_chinh_list.Where(l => l.TenLop.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "name":
+                    lop_chinh_list = lop_chinh_list.OrderBy(l => l.TenLop.Split(' ').LastOrDefault());
+                    break;
+                case "name_desc":
+                    lop_chinh_list = lop_chinh_list.OrderByDescending(l => l.TenLop.Split(' ').LastOrDefault());
+                    break;
+                default:
+                    lop_chinh_list = lop_chinh_list.OrderBy(l => l.MaLop);
+                    break;
+            }
+            int pageSize =  10;
             int pageNumber = (page ?? 1);
 
-            return View(lop_chinh.ToPagedList(pageNumber, pageSize));
+            return View(lop_chinh_list.ToPagedList(pageNumber, pageSize));
         }
         public ActionResult ExportToExcel()
         {
@@ -92,21 +105,7 @@ namespace ManageStudentsV2.Controllers
             return File(fileBytes, "text/csv", fileName);
         }
 
-        // GET: Lop_chinh/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Lop_chinh lop_chinh = db.Lop_chinh.Find(id);
-            if (lop_chinh == null)
-            {
-                return HttpNotFound();
-            }
-            return View(lop_chinh);
-        }
-
+        
         // GET: Lop_chinh/Create
         public ActionResult Create()
         {

@@ -1,52 +1,91 @@
-﻿@model IEnumerable<ManageStudentsV2.Models.Phan_cong>
-
+﻿@model PagedList.IPagedList<ManageStudentsV2.Models.Phan_cong>
+@using PagedList.Mvc;
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_ManageStudentHome.cshtml";
 }
+<div class="container">
 
-<h2>Index</h2>
+    <div class="headerAdd">
+        <h2>Phân Công</h2>
+        <div class="button-add">
+            @using (Html.BeginForm())
+            {
+                <div class="search-form">
+                    @Html.TextBox("SearchString", null, new { @class = "search-input", placeholder = "Nhập tên cần tìm..." })
+                </div>
+            }
+            @Html.ActionLink("Xuất Excel", "ExportToExcel", null, new { @class = "btnAdd" })
+            @Html.ActionLink("+ Phân Công", "Create", null, new { @class = "btnAdd" })
+        </div>
+    </div>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.ngay_bat_dau)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ngay_ket_thuc)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Giao_vien.ten_giao_vien)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Lop_hoc_phan.ma_hoc_phan)
-        </th>
-        <th></th>
-    </tr>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Ngày bắt đầu
+                </th>
+                <th>
+                    Ngày Kết Thúc
+                </th>
+                <th>
+                    @Html.ActionLink("Tên Giáo Viên", "Index", new { sortOrder = ViewBag.NameSortParm })
+                </th>
+                <th>
+                    Lớp
+                </th>
+                <th>
+                    Môn học
+                </th>
+                <th>Hành Động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ngay_bat_dau)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ngay_ket_thuc)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Giao_vien.ten_giao_vien)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Lop_hoc_phan.Lop_chinh.ten_lop)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Lop_hoc_phan.Mon_hoc.ten_mon)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { ma_hoc_phan = item.ma_hoc_phan, ma_giao_vien = item.ma_giao_vien }) |
+                            @Html.ActionLink("Delete", "Delete", new { ma_hoc_phan = item.ma_hoc_phan, ma_giao_vien = item.ma_giao_vien })
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="6" class="no-data">Không tìm thấy Phân Công nào phù hợp.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <br />
+    <br />
+    <!-- Thêm mã phân trang -->
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.ngay_bat_dau)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ngay_ket_thuc)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Giao_vien.ten_giao_vien)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Lop_hoc_phan.ma_hoc_phan)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-        </td>
-    </tr>
-}
-
-</table>
+    @if (Model?.Any() == true)
+    {
+        <div class="row">
+            <div class="col_right"> Trang: @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount </div>
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page, size = ViewBag.currentSize }))
+        </div>
+    }
+</div>

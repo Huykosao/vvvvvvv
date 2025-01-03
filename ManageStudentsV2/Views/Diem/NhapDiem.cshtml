@@ -1,0 +1,93 @@
+﻿@model IEnumerable<ManageStudentsV2.Models.DiemViewModel>
+
+@{
+    ViewBag.Title = "Danh sách Điểm";
+    Layout = "~/Views/Shared/_ManageStudentHome.cshtml";
+}
+<div class="container">
+    @using (Html.BeginForm("SubmitScores", "Diem", FormMethod.Post))
+    {
+        <div class="headerAdd">
+            <h2>Danh sách Điểm</h2>
+            <div class="button-add">
+                @if (Session["Role"] != null && (Session["Role"].ToString() == "Admin" || Session["Role"].ToString() == "Teacher"))
+                {
+                    using (Html.BeginForm())
+                    {
+                    <div class="search-form">
+                        @Html.TextBox("SearchString", null, new { @class = "search-input", placeholder = "Nhập tên cần tìm..." })
+                    </div>
+                    }
+                @Html.ActionLink("Xuất Excel", "ExportToExcel", null, new { @class = "btnAdd" })
+
+                    @*@Html.ActionLink("+ Nhập Điểm", "Create", null, new { @class = "btnAdd" })*@
+                    @*<input type="submit" value="Submit All" class="btnAdd" />*@
+                }
+            </div>
+         </div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Tên Sinh Viên</th>
+                    <th>Điểm Số 1</th>
+                    <th>Điểm Số 2</th>
+                    <th>Điểm Cuối Kỳ</th>
+                    <th>Tên Môn</th>
+                    <th>Lớp Chính</th>
+                    <th>Lớp Học Phần</th>
+                    <th>Hành Động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    for (int i = 0; i < Model.Count(); i++)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => Model.ElementAt(i).TenSinhVien)</td>
+                            <td>
+                                @Html.TextBoxFor(modelItem => Model.ElementAt(i).DiemSo1, new { @class = "form-control", name = $"diemViewModels[{i}].DiemSo1" })
+
+                                @Html.HiddenFor(modelItem => Model.ElementAt(i).MaSinhVien, new { name = $"diemViewModels[{i}].MaSinhVien" })
+                                @Html.HiddenFor(modelItem => Model.ElementAt(i).MaMon, new { name = $"diemViewModels[{i}].MaMon" })
+                                @Html.HiddenFor(modelItem => Model.ElementAt(i).MaHocPhan, new { name = $"diemViewModels[{i}].MaHocPhan" })
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(modelItem => Model.ElementAt(i).DiemSo2, new { @class = "form-control", name = $"diemViewModels[{i}].DiemSo2" })
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(modelItem => Model.ElementAt(i).DiemCuoiKy, new { @class = "form-control", name = $"diemViewModels[{i}].DiemCuoiKy" })
+                            </td>
+                            <td>@Html.DisplayFor(modelItem => Model.ElementAt(i).TenMon)</td>
+                            <td>@Html.DisplayFor(modelItem => Model.ElementAt(i).LopChinh)</td>
+                            <td>@Html.DisplayFor(modelItem => Model.ElementAt(i).LopHocPhan)</td>
+                            <td>
+                                @Html.ActionLink("Edit", "Edit", new { ma_sinh_vien = Model.ElementAt(i).MaSinhVien, ma_mon = Model.ElementAt(i).MaMon }, new { @class = "btnEdit" })
+                            </td>
+                        </tr>
+                    }
+
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="8" class="no-data">Không tìm thấy điểm nào phù hợp.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    @*@if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }*@
+</div>

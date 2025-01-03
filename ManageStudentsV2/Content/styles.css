@@ -20,7 +20,7 @@ header h1 {
     letter-spacing: 0.5px;
     text-transform: uppercase;
 }
-
+    
 
 .menu {
     display: flex;
@@ -28,9 +28,6 @@ header h1 {
     justify-content: space-between;
     padding: 10px 20px;
 }
-
-
-
 .menu .Login a {
     text-decoration: none;
     color: white;
@@ -41,62 +38,61 @@ header h1 {
     background-color: #2563eb;
     color: rgb(0, 0, 0);
 }
+.Login-header{
+    height:56px;
+}
 
 nav {
-    background-color: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    position: sticky;
+    position: fixed;
     top: 0;
-    z-index: 1000;
-    flex-shrink: 0;
+    left: 0;
+    width: 250px; /* Chiều rộng của sidebar */
+    height: 100%; /* Toàn màn hình */
+    background-color: #2563eb;
+    color: white;
+    padding-top: 20px;
+    overflow-y: auto; /* Thêm cuộn khi nội dung dài */
+    z-index: 100;
+
 }
 
 nav ul {
-    list-style: none;
+    display: block; /* Chuyển từ ngang sang dọc */
     padding: 0;
     margin: 0;
-    display: flex;
-    justify-content: left;
-    margin: 0 auto;
 }
 
 nav ul li {
     margin: 0;
-    position: relative;
 }
 
 nav ul li a {
-    color: #334155;
-    text-decoration: none;
-    padding: 16px 24px;
     display: block;
+    padding: 12px 20px;
+    color: white;
+    font-size: 16px;
     font-weight: 500;
-    transition: all 0.3s ease;
-    position: relative;
-
+    transition: 0.3s;
+    text-align: left;
+    
 }
 
-nav ul li a::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    width: 0;
-    height: 3px;
-    left: 50%;
-    background-color: #2563eb;
-    transition: all 0.3s ease;
-    transform: translateX(-50%);
-}
 
 nav ul li a:hover {
-    color: #2563eb;
+    background-color: #1d4ed8;
+    transform: translateX(10%);
+     /* Hiệu ứng khi hover */
+    color: red;
 }
 
-nav ul li a:hover::after {
-    width: 100%;
+nav ul li.active a {
+    background-color: #1d4ed8;
+    font-weight: bold;
 }
-
-
+nav ul li img {
+    width: 50px;
+    height: 50px;  
+}
 table {
     width: 100%;
     border-collapse: separate;
@@ -159,7 +155,8 @@ table a{
 
 .create-forms {
     max-width: 600px;
-    margin: 48px auto;
+    margin-left: 40%;
+    margin-top: 200px;
     padding: 32px;
     background-color: #ffffff;
     border-radius: 8px;
@@ -207,60 +204,54 @@ table a{
 .btnCreate:hover {
     background-color: #064ee9;
 }
+
+/* Container chung */
+.button-add {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    
+}
+
 .search-form {
     display: flex;
+    align-items: center;
     gap: 10px;
-    margin-right: 10px;
 }
 
 .search-input {
-    padding: 8px;
-    font-size: 14px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
     border-radius: 5px;
-    border: #ddd solid 1px;
+    width: 300px;
+    transition: border-color 0.3s;
+    margin-right: 30px;
 }
 
 .search-input:focus {
-    outline: 2px solid #2563eb;
-}
-
-.search-btn {
-    padding: 8px 12px;
-    background-color: #2563eb;
-    color: white;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: 500;
-    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-}
-
-.search-btn:hover {
-    background-color: #5d8cf0;
+    outline: none;
+    border-color: #2563eb;
 }
 
 .btnAdd {
-    margin-right: 10px;
     background-color: #2563eb;
     color: white;
-    padding: 12px 24px;
+    padding: 10px 20px;
     font-size: 16px;
     font-weight: 500;
     text-decoration: none;
     border-radius: 5px;
     transition: all 0.3s ease;
-    display: inline-block;
-    margin:20px;
-}
-
-.btnAdd:hover {
-    background-color: #3566fa;
+    margin-right: 20px;
+    border: none;
+    cursor: pointer;
 }
 
 .headerAdd {
     display: flex;
-    flex-grow: 1;
     align-items:center;
 }
 
@@ -274,8 +265,13 @@ table a{
 .btnEdit{
     color:black;
 }
-.btn1{
-    border:none;
+.create-forms .hacBa {
+    color: red;
+    margin-bottom: 13px;
+    font-size: 18px;
+}
+.btn1 {
+    border: none;
     margin: 12px 0;
     background-color: #2563eb;
     color: white;
@@ -283,6 +279,7 @@ table a{
     font-size: 16px;
     font-weight: 500;
     border-radius: 5px;
+    cursor: pointer;
 }
 .btn2 {
     border: none;
@@ -296,6 +293,7 @@ table a{
 }
 .home-container {
     font-family: Arial, sans-serif;
+
 }
 
 .hero {
@@ -309,24 +307,58 @@ table a{
     align-items: center;
     justify-content: center;
     height: 100vh;
+    margin-left: 250px; /* Đẩy nội dung qua phải để không chồng lên sidebar */
 }
 
 .hero .overlay {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        color: white;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
 }
 .hero h1 {
         font-size: 100px;
 }
 .hero .btn-primary:hover {
+    background-color: #1e3a8a;
+}
+.hero2 {
+    position: relative;
+    height: 400px;
+    background-image: url('https://media.dau.edu.vn/Media/1_TH1057/Images/202012/4-20201225100608-e.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.hero2 .overlay2 {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+}
+
+.hero2 h1 {
+    font-size: 100px;
+}
+
+.hero2 .btn-primary:hover {
     background-color: #1e3a8a;
 }
 
@@ -346,7 +378,8 @@ table a{
     margin-bottom: 20px;
     
 }
-.group{
+
+.group {
     background-color: rgba(0, 0, 0, 0.7);
     padding: 30px;
     width: 350px;
@@ -380,7 +413,7 @@ table a{
 
 .form-group input {
     padding: 10px;
-    width: 350px;
+    width: 100%;
     box-sizing: border-box;
 }
 
@@ -416,34 +449,24 @@ table a{
     background-color: #fff;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
-
 /*Student dasdboard*/
-.dashboard {
-    display: flex;
-    justify-content: space-around;
-    margin-top: 20px;
-}
-
-.card {
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
-    border-radius: 5px;
+.information-student {
+    max-width: 800px;
+    margin-left: 35%;
+    margin-top: 200px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     padding: 20px;
-    text-align: center;
-    width: 30%;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-size: 18px;
+}
+.information-student h2{
+    text-align:center; 
 }
 
-    .card h3 {
-        margin-bottom: 10px;
-        color: #343a40;
-    }
-
-    .card p {
-        font-size: 24px;
-        color: #007bff;
-    }
-.input100{
-    padding: 10px ;
+.container {
+    margin-left: 250px; 
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+    
 }
-/*Student dasdboard*/

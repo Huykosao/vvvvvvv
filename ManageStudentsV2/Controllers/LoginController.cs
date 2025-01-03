@@ -12,7 +12,15 @@ namespace ManageStudentsV2.Controllers
         [HttpGet]
         public ActionResult Index()
         {
+            
+            // Kiểm tra nếu người dùng đã đăng nhập
+            if (Session["UserID"] != null)
+            {
+                return RedirectToAction("Index", "ManageStudentHome");
+            }
+
             return View();
+            
         }
 
         // POST: Login
@@ -62,6 +70,7 @@ namespace ManageStudentsV2.Controllers
                     ModelState.AddModelError("", "Tên đăng nhập không tồn tại.");
                 }
             }
+
 
             return View(model);
         }

@@ -6,58 +6,91 @@
     Layout = "~/Views/Shared/_ManageStudentHome.cshtml";
 }
 
+<div class="container">
 
-<div class="headerAdd">
-    <h2>Danh sách Lịch Dạy</h2>
-    <div class="button-add">
-        @Html.ActionLink("Xuất Excel", "ExportToExcel", null, new { @class = "btnAdd" })
-        @Html.ActionLink("+ Thêm Lịch Học", "Create", null, new { @class = "btnAdd" })
+    <div class="headerAdd">
+        @if (Session["Role"].ToString() == "Admin")
+        {
+            <h2>Danh sách Lịch Dạy</h2>
+        }
+        else if (Session["Role"].ToString() == "Student")
+        {
+            <h2>Danh sách Lịch Học</h2>
+        }
+        else if (Session["Role"].ToString() == "Teacher")
+        {
+            <h2>Danh sách Lịch Dạy</h2>
+        }
+
+        <div class="button-add">
+            @if (Session["Role"].ToString() == "Admin")
+            {
+                using (Html.BeginForm())
+                {
+                    <div class="search-form">
+                        @Html.TextBox("SearchString", null, new { @class = "search-input", placeholder = "Nhập tên cần tìm..." })
+                    </div>
+                }
+                @Html.ActionLink("Xuất Excel", "ExportToExcel", null, new { @class = "btnAdd" })
+                @Html.ActionLink("+ Thêm Lịch Học", "Create", null, new { @class = "btnAdd" })
+            }
+        </div>
     </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.ActionLink("Tên Môn Học", "Index", new { sortOrder = ViewBag.NameSortParm })
+                </th>
+                <th>Lớp </th>
+                <th>Phòng</th>
+                <th>
+                    @Html.ActionLink("Thời Gian", "Index", new { sortOrder = ViewBag.DateSortParm })
+                </th>
+                @if (Session["Role"].ToString() == "Admin" && Session["Role"].ToString()== "Teacher")
+                {
+                    <th>Hành Động</th>
+                }
+                
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model?.Any() == true)
+
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.TenMonHoc)</td>
+                        <td>@Html.DisplayFor(modelItem => item.TenLopChinh)</td>
+                        <td>@Html.DisplayFor(modelItem => item.PhongHoc)</td>
+                        <td>@Html.DisplayFor(modelItem => item.ThoiGian)</td>
+                        @if (Session["Role"].ToString() == "Admin" && Session["Role"].ToString() == "Teacher")
+                        {
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.MaLich }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.MaLich })
+                        </td>
+                        }
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="5" class="no-data">Không tìm thấy lịch nào phù hợp.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @if (Model?.Any() == true)
+
+    {
+        <div class="row">
+
+            <div class="col_right"> Trang: @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount </div>
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page, size = ViewBag.currentSize }))
+        </div>
+    }
 </div>
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>Thời Gian</th>
-            <th>Môn học</th>
-            <th>Lớp </th>
-            <th>Phòng</th>
-            <th>Hành Động</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model?.Any() == true)
-
-        {
-        foreach (var item in Model)
-        {
-        <tr>
-            <td>@Html.DisplayFor(modelItem => item.ThoiGian)</td>
-            <td>@Html.DisplayFor(modelItem => item.TenMonHoc)</td>
-            <td>@Html.DisplayFor(modelItem => item.TenLopChinh)</td>
-            <td>@Html.DisplayFor(modelItem => item.PhongHoc)</td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.MaLich }) |
-                @Html.ActionLink("Details", "Details", new { id = item.MaLich }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.MaLich })
-            </td>
-        </tr>
-        }
-        }
-        else
-        {
-        <tr>
-            <td colspan="5" class="no-data">Không tìm thấy lịch nào phù hợp.</td>
-        </tr>
-        }
-    </tbody>
-</table>
-<div class="row">
-    <div class="col">
-        @using (Html.BeginForm("Index", "Lich_hoc", FormMethod.Get))
-        {<p> Kích thước trang: @Html.DropDownList("size", (List<SelectListItem>)ViewBag.size, new { @onchange = "this.form.submit();" }) </p>}
-    </div>
-    <div class="col_right"> Trang: @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount </div>
-    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, size = ViewBag.currentSize }))
-</div>
-

@@ -11,7 +11,7 @@
             @using (Html.BeginForm("Index", "Login", FormMethod.Post, new { @class = "login100-form validate-form" }))
             {
                 <img src="https://media.dau.edu.vn/Media/1_TH1057/Images/logo-dhktdn-150.png">
-                <h2>Member Login</h2>
+                <h2>Đăng Nhập</h2>
                 <div class="form-group">
                     <label for="username">Nhập Tài Khoản:</label>
                     @Html.TextBoxFor(m => m.Username, new { @class = "input100", placeholder = "Username", @id = "username" })
@@ -27,7 +27,7 @@
 
                 <div class="container-login100-form-btn">
                     <button type="submit" class="btn-submit">
-                        Login
+                        Đăng Nhập
                     </button>
                 </div>
             }

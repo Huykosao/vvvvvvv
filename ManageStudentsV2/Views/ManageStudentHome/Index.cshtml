@@ -9,11 +9,11 @@
 {
     if (Session["Role"].ToString() == "Student")
     {
-        <h2>Student Dashboard</h2>
-
         if (Model != null)
         {
             <div class="information-student">
+                <h2>Student Dashboard</h2>
+
                 <div class="student-id">
                     MSSV : @Model.ma_sinh_vien
                 </div>
@@ -56,8 +56,8 @@
 else
 {
     <div class="home-container">
-        <div class="hero">
-            <div class="overlay">
+        <div class="hero2">
+            <div class="overlay2">
                 <h1>Chào mừng đến với Hệ thống Quản lý Sinh Viên</h1>
             </div>
         </div>

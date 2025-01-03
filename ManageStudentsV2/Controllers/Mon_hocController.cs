@@ -12,40 +12,77 @@ using PagedList;
 
 namespace ManageStudentsV2.Controllers
 {
-    [RoleAuthorize("Admin")]
+    //[RoleAuthorize("Admin")]
     public class Mon_hocController : Controller
     {
         private Quan_Ly_Sinh_Vien_Entities db = new Quan_Ly_Sinh_Vien_Entities();
 
         // GET: Mon_hoc
-        public ActionResult Index(int? size, int? page)
+        public ActionResult Index(String sortOrder,String currterFilter,String searchString,int? page)
         {
-            List<SelectListItem> items = new List<SelectListItem>();
-            items.Add(new SelectListItem { Text = "5", Value = "5" });
-            items.Add(new SelectListItem { Text = "10", Value = "10" });
-            items.Add(new SelectListItem { Text = "20", Value = "20" });
-            items.Add(new SelectListItem { Text = "25", Value = "25" });
-            items.Add(new SelectListItem { Text = "50", Value = "50" });
-            items.Add(new SelectListItem { Text = "100", Value = "100" });
-            items.Add(new SelectListItem { Text = "200", Value = "200" });
-            foreach (var item in items)
+            
+            ViewBag.currentSort = sortOrder;
+            ViewBag.NameSortParm = sortOrder == "name" ? "name_desc" : "name";
+            if (searchString != null)
             {
-                if (item.Value == size.ToString()) item.Selected = true;
+                page = 1;
             }
-            ViewBag.size = items; // ViewBag DropDownList
-            ViewBag.currentSize = size; // tạo biến kích thước trang hiện tại
-            page = page ?? 1;
+            else
+            {
+                searchString = currterFilter;
+            }
+            ViewBag.currentFilter = searchString;
+
 
             var mon_hoc = db.Mon_hoc
                             .Include(mh => mh.Lop_hoc_phan.Select(lhp => lhp.Lop_chinh))
                             .Include(mh => mh.Nganh)
-                            .ToList()
-                            .OrderBy(mh => mh.ma_nganh);
-            int pageSize = (size ?? 5);
+                            .OrderBy(mh => mh.ma_mon)
+                            .ToList();
+
+            if (Session["Role"] != null && Session["Role"].ToString() == "Student")
+            {
+                int userId = Convert.ToInt32(Session["UserID"]);
+                int student_majoring = db.Hoc_sinh
+                                            .Include(hs => hs.Lop_chinh.Nganh)
+                                            .Select(hs => hs.Lop_chinh.Nganh.ma_nganh)
+                                            .FirstOrDefault();
+                mon_hoc = db.Mon_hoc
+                                    .Include(mh => mh.Lop_hoc_phan.Select(lhp => lhp.Lop_chinh))
+                                    .Include(mh => mh.Nganh)
+                                    .OrderBy(mh => mh.ma_mon)
+                                    .Where(mh => mh.ma_nganh == student_majoring)
+                                    .ToList();
+
+            }
+           
+               
+            
+
+            var mon_hoc_list = mon_hoc.AsEnumerable();
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                mon_hoc_list = mon_hoc_list.Where(mh => mh.ten_mon.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "name":
+                    mon_hoc_list = mon_hoc_list.OrderBy(mh => mh.ten_mon.Split(' ').LastOrDefault());
+                    break;
+                case "name_desc":
+                    mon_hoc_list = mon_hoc_list.OrderByDescending(mh => mh.ten_mon.Split(' ').LastOrDefault());
+                    break;
+                default:
+                    mon_hoc_list = mon_hoc_list.OrderBy(mh => mh.ma_mon);
+                    break;
+            }
+            int pageSize = 10;
+
             int pageNumber = (page ?? 1);
 
-            return View(mon_hoc.ToPagedList(pageNumber, pageSize));
+            return View(mon_hoc_list.ToPagedList(pageNumber, pageSize));
         }
+        [RoleAuthorize("Admin")]
         public ActionResult ExportToExcel()
         {
             // Lấy danh sách môn học
@@ -76,22 +113,10 @@ namespace ManageStudentsV2.Controllers
             // Trả về file CSV
             return File(fileBytes, "text/csv", fileName);
         }
-        // GET: Mon_hoc/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Mon_hoc mon_hoc = db.Mon_hoc.Find(id);
-            if (mon_hoc == null)
-            {
-                return HttpNotFound();
-            }
-            return View(mon_hoc);
-        }
+
 
         // GET: Mon_hoc/Create
+        [RoleAuthorize("Admin")]
         public ActionResult Create()
         {
             ViewBag.ma_nganh = new SelectList(db.Nganhs, "ma_nganh", "ten_nganh");
@@ -101,6 +126,7 @@ namespace ManageStudentsV2.Controllers
         // POST: Mon_hoc/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        [RoleAuthorize("Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "ten_mon,mo_ta_mon, ma_nganh")] Mon_hoc mon_hoc)
@@ -114,7 +140,7 @@ namespace ManageStudentsV2.Controllers
 
             return View(mon_hoc);
         }
-
+        [RoleAuthorize("Admin")]
         // GET: Mon_hoc/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -129,6 +155,7 @@ namespace ManageStudentsV2.Controllers
             }
             return View(mon_hoc);
         }
+        [RoleAuthorize("Admin")]
 
         // POST: Mon_hoc/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
@@ -145,7 +172,7 @@ namespace ManageStudentsV2.Controllers
             }
             return View(mon_hoc);
         }
-
+        [RoleAuthorize("Admin")]
         // GET: Mon_hoc/Delete/5
         public ActionResult Delete(int? id)
         {
@@ -158,18 +185,49 @@ namespace ManageStudentsV2.Controllers
             {
                 return HttpNotFound();
             }
+
+            ViewBag.canh_bao = "Thao tác này sẽ xóa các lớp liên quan (Lớp học phần, Điểm, Phân công, Lịch Học, Lớp đăng ký) !!!";
             return View(mon_hoc);
         }
-
+        [RoleAuthorize("Admin")]
         // POST: Mon_hoc/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Mon_hoc mon_hoc = db.Mon_hoc.Find(id);
-            db.Mon_hoc.Remove(mon_hoc);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            using (var transaction = db.Database.BeginTransaction())
+            {
+                try
+                {
+
+                    Mon_hoc mon_hoc = db.Mon_hoc.Find(id);
+                    var monhoc_diem = db.Diems.Where(d => d.ma_mon == mon_hoc.ma_mon).ToList();
+                    var monhoc_lophocphan = db.Lop_hoc_phan.Where(lhp => lhp.ma_mon == mon_hoc.ma_mon).ToList();
+                    foreach (var lophocphan in monhoc_lophocphan) 
+                    {
+                        var lichhoc = db.Lich_hoc.Where(lh => lh.ma_hoc_phan == lophocphan.ma_hoc_phan).ToList();
+                        var phancong = db.Phan_cong.Where(pc => pc.ma_hoc_phan == lophocphan.ma_hoc_phan).ToList();
+                        var lopdangky = db.Lop_dang_ky.Where(ldk => ldk.ma_hoc_phan == lophocphan.ma_hoc_phan).ToList();
+                        db.Lop_dang_ky.RemoveRange(lopdangky);
+                        db.Lich_hoc.RemoveRange(lichhoc);
+                        db.Phan_cong.RemoveRange(phancong);
+                    }
+
+                    db.Diems.RemoveRange(monhoc_diem);
+                    db.Lop_hoc_phan.RemoveRange(monhoc_lophocphan);
+                    db.Mon_hoc.Remove(mon_hoc);
+                    db.SaveChanges();
+                    transaction.Commit();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    Console.WriteLine("Transaction failed: " + ex.Message);
+                    return RedirectToAction("Index");
+                }
+            }
+           
         }
 
         protected override void Dispose(bool disposing)

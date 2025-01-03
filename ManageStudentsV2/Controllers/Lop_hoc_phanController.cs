@@ -19,54 +19,127 @@ namespace ManageStudentsV2.Controllers
         private Quan_Ly_Sinh_Vien_Entities db = new Quan_Ly_Sinh_Vien_Entities();
 
         // GET: Lop_hoc_phan
-        [RoleAuthorize("Admin")]
-        public ActionResult Index(int? size, int? page)
+        //[RoleAuthorize("Admin")]
+        public ActionResult Index(String sortOrder,String currentFilter,String searchString,int? page)
         {
-            List<SelectListItem> items = new List<SelectListItem>();
-            items.Add(new SelectListItem { Text = "5", Value = "5" });
-            items.Add(new SelectListItem { Text = "10", Value = "10" });
-            items.Add(new SelectListItem { Text = "20", Value = "20" });
-            items.Add(new SelectListItem { Text = "25", Value = "25" });
-            items.Add(new SelectListItem { Text = "50", Value = "50" });
-            items.Add(new SelectListItem { Text = "100", Value = "100" });
-            items.Add(new SelectListItem { Text = "200", Value = "200" });
-            foreach (var item in items)
+            ViewBag.currentSort = sortOrder;
+            ViewBag.NameSortParm = sortOrder == "name" ? "name_desc" : "name";
+            if(searchString != null)
             {
-                if (item.Value == size.ToString()) item.Selected = true;
+                page = 1;
             }
-            ViewBag.size = items; // ViewBag DropDownList
-            ViewBag.currentSize = size; // tạo biến kích thước trang hiện tại
-            page = page ?? 1;
-            var lop_hoc_phan = db.Lop_hoc_phan
-                                    .Include(lhp => lhp.Lop_chinh)
-                                    .Include(lhp => lhp.Mon_hoc)
-                                    .Include(lhp => lhp.Phan_cong.Select(pc => pc.Giao_vien))
-                                    .Select(lhp => new ManageStudentsV2.Models.LopHocPhanViewModel
-                                    {
-                                        MaHocPhan = lhp.ma_hoc_phan,
-                                        MaLop = lhp.ma_lop,
-                                        TenLop = lhp.Lop_chinh.ten_lop,
-                                        MaMon = lhp.ma_mon,
-                                        TenMon = lhp.Mon_hoc.ten_mon,
-                                        GiaoVien = lhp.Phan_cong.FirstOrDefault().Giao_vien.ten_giao_vien,
-                                        SoSinhVien = db.Lop_dang_ky.Count(ldk => ldk.ma_hoc_phan == lhp.ma_hoc_phan),
-                                        Nganh = lhp.Mon_hoc.Nganh.ten_nganh,
-                                        NienKhoa = lhp.Mon_hoc.Nganh.Nien_khoa.ten_nien_khoa,
-                                        Khoa = lhp.Mon_hoc.Nganh.Nien_khoa.Khoa.ten_khoa
-                                    })
-                                    .OrderBy(lhp => lhp.MaHocPhan);
-            int pageSize = (size ?? 5);
-            int pageNumber = (page ?? 1);
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.currentFilter = searchString;
+            if (Session["Role"] == null)
+                return RedirectToAction("Index", "ManageStudentHome");
+            if (Session["Role"].ToString() == "Admin")
+            {
+                //sql
+                var lop_hoc_phan = db.Lop_hoc_phan
+                                        .Include(lhp => lhp.Lop_chinh)
+                                        .Include(lhp => lhp.Mon_hoc)
+                                        .Include(lhp => lhp.Phan_cong.Select(pc => pc.Giao_vien))
+                                        .Select(lhp => new ManageStudentsV2.Models.LopHocPhanViewModel
+                                        {
+                                            MaHocPhan = lhp.ma_hoc_phan,
+                                            MaLop = lhp.ma_lop,
+                                            TenLop = lhp.Lop_chinh.ten_lop,
+                                            MaMon = lhp.ma_mon,
+                                            TenMon = lhp.Mon_hoc.ten_mon,
+                                            GiaoVien = lhp.Phan_cong.FirstOrDefault().Giao_vien.ten_giao_vien,
+                                            SoSinhVien = db.Lop_dang_ky.Count(ldk => ldk.ma_hoc_phan == lhp.ma_hoc_phan),
+                                            Nganh = lhp.Mon_hoc.Nganh.ten_nganh,
+                                            NienKhoa = lhp.Mon_hoc.Nganh.Nien_khoa.ten_nien_khoa,
+                                            Khoa = lhp.Mon_hoc.Nganh.Nien_khoa.Khoa.ten_khoa
+                                        })
+                                        .OrderBy(lhp => lhp.MaHocPhan);
+                var lop_hoc_phan_list = lop_hoc_phan.AsEnumerable();
+                if (!String.IsNullOrEmpty(searchString))
+                {
+                    lop_hoc_phan_list = lop_hoc_phan_list.Where(lhp => lhp.TenLop.Contains(searchString));
+                }
+                switch (sortOrder)
+                {
+                    case "name":
+                        lop_hoc_phan_list = lop_hoc_phan_list.OrderBy(lhp => lhp.TenLop.Split(' ').LastOrDefault());
+                        break;
+                    case "name_desc":
+                        lop_hoc_phan_list = lop_hoc_phan_list.OrderByDescending(lhp => lhp.TenLop.Split(' ').LastOrDefault());
+                        break;
+                    default:
+                        lop_hoc_phan_list = lop_hoc_phan_list.OrderBy(lhp => lhp.MaHocPhan);
+                        break;
+                }
+                int pageSize = 10;
+                int pageNumber = (page ?? 1);
 
-            return View(lop_hoc_phan.ToPagedList(pageNumber, pageSize));
+                return View(lop_hoc_phan_list.ToPagedList(pageNumber, pageSize));
+            }else if (Session["Role"].ToString() == "Teacher")
+            {
+
+                int userId = Convert.ToInt32(Session["UserID"]);
+                var giao_vien = db.Giao_vien.Where(gv => gv.UserID == userId).FirstOrDefault();
+
+                if (giao_vien == null)
+                    return View();
+
+                //Tên Môn Giáo Viên   Số Sinh Viên Ngành   Niên Khóa   Khoa
+                var lop_hoc_phan = db.Phan_cong
+                                        .Where(pc => pc.ma_giao_vien == giao_vien.ma_giao_vien)
+                                        .Select(pc => new ManageStudentsV2.Models.LopHocPhanViewModel
+                                        {
+                                            MaHocPhan = pc.Lop_hoc_phan.ma_hoc_phan,
+                                            MaLop = pc.Lop_hoc_phan.ma_lop,
+                                            MaMon = pc.Lop_hoc_phan.Mon_hoc.ma_mon,
+                                            TenMon = pc.Lop_hoc_phan.Mon_hoc.ten_mon,
+                                            GiaoVien = pc.Giao_vien.ten_giao_vien,
+                                            TenLop = pc.Lop_hoc_phan.Lop_chinh.ten_lop,
+                                            SoSinhVien = pc.Lop_hoc_phan.Lop_dang_ky.Count(),
+                                            Nganh = pc.Lop_hoc_phan.Mon_hoc.Nganh.ten_nganh,
+                                            NienKhoa = pc.Lop_hoc_phan.Mon_hoc.Nganh.Nien_khoa.ten_nien_khoa,
+                                            Khoa = pc.Lop_hoc_phan.Mon_hoc.Nganh.Nien_khoa.Khoa.ten_khoa
+                                        }).OrderBy(lhp => lhp.MaHocPhan);
+                var lop_hoc_phan_list = lop_hoc_phan.AsEnumerable();
+                if(!String.IsNullOrEmpty(searchString))
+                {
+                    lop_hoc_phan_list = lop_hoc_phan_list.Where(lhp => lhp.TenLop.Contains(searchString));
+                }
+                switch (sortOrder)
+                {
+                    case "name":
+                        lop_hoc_phan_list = lop_hoc_phan_list.OrderBy(lhp => lhp.TenLop.Split(' ').LastOrDefault());
+                        break;
+                    case "name_desc":
+                        lop_hoc_phan_list = lop_hoc_phan_list.OrderByDescending(lhp => lhp.TenLop.Split(' ').LastOrDefault());
+                        break;
+                    default:
+                        lop_hoc_phan_list = lop_hoc_phan_list.OrderBy(lhp => lhp.MaHocPhan);
+                        break;
+                }
+                int pageSize = 10;
+                int pageNumber = (page ?? 1);
+                return View(lop_hoc_phan_list.ToPagedList(pageNumber, pageSize));
+
+            }
+            else if (Session["Role"].ToString() == "Student")
+            {
+                return View();
+            }
+
+            return RedirectToAction("Index", "ManageStudentHome");
+
         }
+        [RoleAuthorize("Admin")]
         public ActionResult ExportToExcel()
         {
             // Lấy danh sách lớp học phần
             var lop_hoc_phan = db.Lop_hoc_phan
                                  .Include(lhp => lhp.Lop_chinh)
                                  .Include(lhp => lhp.Mon_hoc)
-                                 .Include(lhp => lhp.Phan_cong.FirstOrDefault().Giao_vien)
+                                 .Include(lhp => lhp.Phan_cong.Select(pc => pc.Giao_vien))
                                  .OrderBy(lhp => lhp.ma_hoc_phan)
                                  .ToList();
 
@@ -76,7 +149,7 @@ namespace ManageStudentsV2.Controllers
             // Thêm tiêu đề cột (chấm phẩy làm dấu phân cách)
             sb.AppendLine("\"Mã Học Phần\";\"Tên Lớp\";\"Tên Môn\";\"Giáo Viên\";\"Số Sinh Viên\";\"Ngành\";\"Niên Khóa\";\"Khoa\"");
 
-            // Thêm dữ liệu vào file CSV
+            // Thêm dữ liệu vào file    
             foreach (var lhp in lop_hoc_phan)
             {
                 sb.AppendLine($"\"{lhp.ma_hoc_phan}\";" +
@@ -96,21 +169,7 @@ namespace ManageStudentsV2.Controllers
             // Trả về file CSV
             return File(fileBytes, "text/csv", fileName);
         }
-        // GET: Lop_hoc_phan/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Lop_hoc_phan lop_hoc_phan = db.Lop_hoc_phan.Find(id);
-            if (lop_hoc_phan == null)
-            {
-                return HttpNotFound();
-            }
-            return View(lop_hoc_phan);
-        }
-
+        [RoleAuthorize("Admin")]
         // GET: Lop_hoc_phan/Create
         public ActionResult Create()
         {
@@ -118,7 +177,7 @@ namespace ManageStudentsV2.Controllers
             ViewBag.ma_mon = new SelectList(db.Mon_hoc, "ma_mon", "ten_mon");
             return View();
         }
-
+        [RoleAuthorize("Admin")]
         // POST: Lop_hoc_phan/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -137,7 +196,7 @@ namespace ManageStudentsV2.Controllers
             ViewBag.ma_mon = new SelectList(db.Mon_hoc, "ma_mon", "ten_mon", lop_hoc_phan.ma_mon);
             return View(lop_hoc_phan);
         }
-
+        [RoleAuthorize("Admin")]
         // GET: Lop_hoc_phan/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -154,7 +213,7 @@ namespace ManageStudentsV2.Controllers
             ViewBag.ma_mon = new SelectList(db.Mon_hoc, "ma_mon", "ten_mon", lop_hoc_phan.ma_mon);
             return View(lop_hoc_phan);
         }
-
+        [RoleAuthorize("Admin")]
         // POST: Lop_hoc_phan/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -172,7 +231,7 @@ namespace ManageStudentsV2.Controllers
             ViewBag.ma_mon = new SelectList(db.Mon_hoc, "ma_mon", "ten_mon", lop_hoc_phan.ma_mon);
             return View(lop_hoc_phan);
         }
-
+        [RoleAuthorize("Admin")]
         // GET: Lop_hoc_phan/Delete/5
         public ActionResult Delete(int? id)
         {
@@ -185,18 +244,39 @@ namespace ManageStudentsV2.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.canh_bao = "Thao tác này sẽ xóa lớp học phần và các lớp liên quan (Phân công, Lịch hoc) !!!";
             return View(lop_hoc_phan);
         }
-
+        [RoleAuthorize("Admin")]
         // POST: Lop_hoc_phan/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Lop_hoc_phan lop_hoc_phan = db.Lop_hoc_phan.Find(id);
-            db.Lop_hoc_phan.Remove(lop_hoc_phan);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            using (var transaction = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    Lop_hoc_phan lop_hoc_phan = db.Lop_hoc_phan.Find(id);
+                    var lophocphan_lichhoc = db.Lich_hoc.Where(l => l.ma_hoc_phan == lop_hoc_phan.ma_hoc_phan).ToList();
+                    var lophocphan_phancong = db.Phan_cong.Where(pc => pc.ma_hoc_phan == lop_hoc_phan.ma_hoc_phan).ToList();
+                    var lophocphan_lopdangky = db.Lop_dang_ky.Where(ldk => ldk.ma_hoc_phan == lop_hoc_phan.ma_hoc_phan).ToList();
+                    db.Lop_dang_ky.RemoveRange(lophocphan_lopdangky);
+                    db.Lich_hoc.RemoveRange(lophocphan_lichhoc);
+                    db.Phan_cong.RemoveRange(lophocphan_phancong);
+                    db.Lop_hoc_phan.Remove(lop_hoc_phan);
+                    db.SaveChanges();
+                    transaction.Commit();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    Console.WriteLine("Transaction failed: " + ex.Message);
+                    return RedirectToAction("Index");
+                }
+            }
+            
         }
 
         protected override void Dispose(bool disposing)

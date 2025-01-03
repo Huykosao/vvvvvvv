@@ -1,46 +1,120 @@
-﻿@model IEnumerable<ManageStudentsV2.Models.Lop_dang_ky>
-
+﻿@model PagedList.IPagedList<ManageStudentsV2.Models.Lop_dang_ky>
+@using PagedList.Mvc;
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_ManageStudentHome.cshtml";
 }
+<div class="container">
 
-<h2>Index</h2>
+    <div class="headerAdd">
+        <h2>Danh sách Lớp Đăng Ký</h2>
+        <div class="button-add">
+            @if (Session["Role"].ToString() == "Admin")
+            {
+                using (Html.BeginForm())
+                {
+                    <div class="search-form">
+                        @Html.TextBox("SearchString", null, new { @class = "search-input", placeholder = "Nhập tên cần tìm..." })
+                    </div>
+                }
+                @Html.ActionLink("Xuất Excel", "ExportToExcel", null, new { @class = "btnAdd" })
+                @Html.ActionLink("+ Thêm Lớp", "Create", null, new { @class = "btnAdd" })
+            }
+            @if (Session["Role"].ToString() == "Student")
+            {
+                @Html.ActionLink("+ Đăng Ký", "Create", null, new { @class = "btnAdd" })
+            }
+        </div>
+    </div>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.ngay_dk)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Hoc_sinh.ten_sinh_vien)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Lop_hoc_phan.ma_hoc_phan)
-        </th>
-        <th></th>
-    </tr>
+    <table class="table">
+        <thead>
+            <tr>
+                @if (Session["Role"].ToString() == "Admin")
+                {
+                    <th>
+                        @Html.ActionLink("Tên Sinh Viên", "Index", new { sortOrder = ViewBag.NameSortParm })
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.ngay_dk)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Hoc_sinh.ten_sinh_vien)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Lop_hoc_phan.ma_hoc_phan)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-        </td>
-    </tr>
-}
+                    </th>
+                }
+                <th>
+                    @Html.ActionLink("Ngày Đăng Ký", "Index", new { sortOrder = ViewBag.DateSortParm })
+                </th>
+                <th>
+                    Mã Học Phần
+                </th>
+                <th>Tên Lớp </th>
+                <th>Tên Giáo Viên</th>
+                <th>Môn Học</th>
+                @if (Session["Role"].ToString() == "Admin" || Session["Role"].ToString() == "Student")
+                {
+                    <th>Hành Động</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Any())
+            {
+                foreach (var item in Model)
+                {
+                    <tr>
+                        @if (Session["Role"].ToString() == "Admin")
+                        {
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Hoc_sinh.ten_sinh_vien)
+                            </td>
+                        }
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ngay_dk)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Lop_hoc_phan.ma_hoc_phan)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Lop_hoc_phan.Lop_chinh.ten_lop)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Lop_hoc_phan.Phan_cong.FirstOrDefault().Giao_vien.ten_giao_vien)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Lop_hoc_phan.Mon_hoc.ten_mon)
+                        </td>
 
-</table>
+                        @if (Session["Role"].ToString() == "Admin")
+                        {
+                            <td>
+                                @Html.ActionLink("Edit", "Edit", new { ma_sinh_vien = item.ma_sinh_vien, ma_hoc_phan = item.ma_hoc_phan })|
+                                @Html.ActionLink("Delete", "Delete", new { ma_sinh_vien = item.ma_sinh_vien, ma_hoc_phan = item.ma_hoc_phan })
+                            </td>
+                        }
+                        else if (Session["Role"].ToString() == "Student")
+                        {
+                            <td>
+                                @Html.ActionLink("Hủy Đăng Ký", "Delete", new { ma_sinh_vien = item.ma_sinh_vien, ma_hoc_phan = item.ma_hoc_phan })
+                            </td>
+                        }
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="7" class="no-data">Không tìm thấy lớp nào phù hợp.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <br />
+    <br />
+    <!-- Thêm mã phân trang -->
+
+    @if (Model?.Any() == true)
+
+    {
+        <div class="row">
+
+            <div class="col_right"> Trang: @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount </div>
+            @Html.PagedListPager(Model, page => Url.Action("Index", new { page, size = ViewBag.currentSize }))
+        </div>
+    }
+</div>

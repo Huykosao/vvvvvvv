@@ -193,6 +193,7 @@
     <Compile Include="Models\Diem.cs">
       <DependentUpon>ManageStudentsModels.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DiemViewModel.cs" />
     <Compile Include="Models\Giao_vien.cs">
       <DependentUpon>ManageStudentsModels.tt</DependentUpon>
     </Compile>
@@ -257,7 +258,7 @@
   <ItemGroup>
     <Content Include="App_Data\NewFile1.txt" />
     <Content Include="Content\PagedList.css" />
-    <Content Include="favicon.ico" />
+    <Content Include="dau.png" />
     <Content Include="Global.asax" />
     <Content Include="images\img-01.png" />
     <Content Include="Models\ManageStudentsModels.Context.tt">
@@ -317,52 +318,41 @@
     <Content Include="Views\Shared\_ManageStudentHome.cshtml" />
     <Content Include="Views\ManageStudentHome\Index.cshtml" />
     <Content Include="Views\Khoa\Delete.cshtml" />
-    <Content Include="Views\Khoa\Details.cshtml" />
     <Content Include="Views\Khoa\Edit.cshtml" />
     <Content Include="Views\Khoa\Index.cshtml" />
     <Content Include="Views\Lop_hoc_phan\Index.cshtml" />
     <Content Include="Views\Lop_hoc_phan\Create.cshtml" />
-    <Content Include="Views\Lop_hoc_phan\Details.cshtml" />
     <Content Include="Views\Lop_hoc_phan\Edit.cshtml" />
     <Content Include="Views\Lop_hoc_phan\Delete.cshtml" />
     <Content Include="Views\Nien_khoa\Delete.cshtml" />
-    <Content Include="Views\Nien_khoa\Details.cshtml" />
     <Content Include="Views\Nien_khoa\Edit.cshtml" />
     <Content Include="Views\Nien_khoa\Index.cshtml" />
     <Content Include="Views\Diem\Create.cshtml" />
     <Content Include="Views\Diem\Delete.cshtml" />
-    <Content Include="Views\Diem\Details.cshtml" />
     <Content Include="Views\Diem\Edit.cshtml" />
     <Content Include="Views\Diem\Index.cshtml" />
     <Content Include="Views\Giao_vien\Delete.cshtml" />
-    <Content Include="Views\Giao_vien\Details.cshtml" />
     <Content Include="Views\Giao_vien\Edit.cshtml" />
     <Content Include="Views\Giao_vien\Index.cshtml" />
     <Content Include="Views\Hoc_sinh\Delete.cshtml" />
-    <Content Include="Views\Hoc_sinh\Details.cshtml" />
     <Content Include="Views\Hoc_sinh\Edit.cshtml" />
     <Content Include="Views\Hoc_sinh\Index.cshtml" />
     <Content Include="Views\Lich_hoc\Create.cshtml" />
     <Content Include="Views\Lich_hoc\Delete.cshtml" />
-    <Content Include="Views\Lich_hoc\Details.cshtml" />
     <Content Include="Views\Lich_hoc\Edit.cshtml" />
     <Content Include="Views\Lich_hoc\Index.cshtml" />
     <Content Include="Views\Lop_chinh\Delete.cshtml" />
-    <Content Include="Views\Lop_chinh\Details.cshtml" />
     <Content Include="Views\Lop_chinh\Edit.cshtml" />
     <Content Include="Views\Lop_chinh\Index.cshtml" />
     <Content Include="Views\Mon_hoc\Delete.cshtml" />
     <Content Include="Views\Mon_hoc\Edit.cshtml" />
     <Content Include="Views\Mon_hoc\Index.cshtml" />
     <Content Include="Views\Nganh\Delete.cshtml" />
-    <Content Include="Views\Nganh\Details.cshtml" />
     <Content Include="Views\Nganh\Edit.cshtml" />
     <Content Include="Views\Nganh\Index.cshtml" />
     <Content Include="Views\Lop_dang_ky\Create.cshtml" />
     <Content Include="Views\Lop_dang_ky\Delete.cshtml" />
-    <Content Include="Views\Lop_dang_ky\Details.cshtml" />
     <Content Include="Views\Lop_dang_ky\Edit.cshtml" />
-    <Content Include="Views\Lop_dang_ky\Index.cshtml" />
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\Admin\Index.cshtml" />
     <Content Include="Views\Teacher\Index.cshtml" />
@@ -375,7 +365,6 @@
     <Content Include="Views\Lop_chinh\Create.cshtml" />
     <Content Include="Views\Giao_vien\Create.cshtml" />
     <Content Include="Views\Mon_hoc\Create.cshtml" />
-    <Content Include="Views\Mon_hoc\Details.cshtml" />
     <Content Include="Views\Hoc_sinh\ExportToExcel.cshtml" />
     <Content Include="Views\Giao_vien\ExportToExcel.cshtml" />
     <Content Include="Views\Lop_chinh\ExportToExcel.cshtml" />
@@ -388,9 +377,11 @@
     <Content Include="Views\Diem\ExportToExcel.cshtml" />
     <Content Include="Views\Phan_cong\Create.cshtml" />
     <Content Include="Views\Phan_cong\Delete.cshtml" />
-    <Content Include="Views\Phan_cong\Details.cshtml" />
     <Content Include="Views\Phan_cong\Edit.cshtml" />
     <Content Include="Views\Phan_cong\Index.cshtml" />
+    <Content Include="Views\Lop_dang_ky\Index.cshtml" />
+    <Content Include="Views\Phan_cong\ExportToExcel.cshtml" />
+    <Content Include="Views\Diem\NhapDiem.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Base\" />

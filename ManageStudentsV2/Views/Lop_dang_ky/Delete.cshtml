@@ -5,45 +5,16 @@
     Layout = "~/Views/Shared/_ManageStudentHome.cshtml";
 }
 
-<h2>Delete</h2>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Lop_dang_ky</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.ngay_dk)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.ngay_dk)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Hoc_sinh.ten_sinh_vien)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Hoc_sinh.ten_sinh_vien)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Lop_hoc_phan.ma_hoc_phan)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Lop_hoc_phan.ma_hoc_phan)
-        </dd>
-
-    </dl>
-
+<div class="create-forms">
+    <h3>Bạn Có Chắc Chắn với Hành Động Này Chứ ? </h3>
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            <input type="submit" value="Delete" class="btn1" /> 
+            @Html.ActionLink("Cancel", "Index",null,new {@class = "btn2"})
         </div>
     }
 </div>

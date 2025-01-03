@@ -14,55 +14,120 @@ using PagedList;
 
 namespace ManageStudentsV2.Controllers
 {
-    [RoleAuthorize("Admin")]
+    
     public class Lich_hocController : Controller
     {
         private Quan_Ly_Sinh_Vien_Entities db = new Quan_Ly_Sinh_Vien_Entities();
 
         // GET: Lich_hoc
-        public ActionResult Index(int? size, int? page)
+        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
         {
-            List<SelectListItem> items = new List<SelectListItem>();
-            items.Add(new SelectListItem { Text = "5", Value = "5" });
-            items.Add(new SelectListItem { Text = "10", Value = "10" });
-            items.Add(new SelectListItem { Text = "20", Value = "20" });
-            items.Add(new SelectListItem { Text = "25", Value = "25" });
-            items.Add(new SelectListItem { Text = "50", Value = "50" });
-            items.Add(new SelectListItem { Text = "100", Value = "100" });
-            items.Add(new SelectListItem { Text = "200", Value = "200" });
-            foreach (var item in items)
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.DateSortParm = string.IsNullOrEmpty(sortOrder) ? "date_desc" : "";
+            ViewBag.NameSortParm = sortOrder == "name" ? "name_desc" : "name";
+
+            if (searchString != null)
             {
-                if (item.Value == size.ToString()) item.Selected = true;
+                page = 1;
             }
-            ViewBag.size = items; // ViewBag DropDownList
-            ViewBag.currentSize = size; // tạo biến kích thước trang hiện tại
-            page = page ?? 1; //if (page == null) page = 1;
+            else
+            {
+                searchString = currentFilter;
+            }
 
-            var lich_hoc = db.Lich_hoc
-                                .Include(lh => lh.Lop_hoc_phan.Mon_hoc) // Bao gồm Mon_hoc
-                                .Select(lh => new ManageStudentsV2.Models.LichHocViewModel
-                                {
-                                    MaLich = lh.ma_lich,
-                                    ThoiGian = (DateTime)lh.thoi_gian,
-                                    PhongHoc = lh.phong_hoc,
-                                    TenLopChinh = db.Lop_chinh
-                                                    .Where(lc => lc.ma_lop == lh.Lop_hoc_phan.ma_lop) 
-                                                    .Select(lc => lc.ten_lop)
-                                                    .FirstOrDefault(), 
-                                    TenMonHoc = lh.Lop_hoc_phan.Mon_hoc.ten_mon
-                                })
-                                .OrderBy(lh => lh.MaLich);
+            ViewBag.CurrentFilter = searchString;
 
-            //var lich_hoc = db.Lich_hoc
-            //                    .Include(l => l.Lop_hoc_phan.Mon_hoc)
-            //                    .OrderBy(l => l.ma_lich);
+            if (Session["Role"] == null)
+                return RedirectToAction("Index", "ManageStudentHome");
 
-            int pageSize = (size ?? 5);
+            IQueryable<LichHocViewModel> lichHocQuery = GetLichHocByRole(Session["Role"].ToString(), (int?)Session["UserID"]);
 
+            if (lichHocQuery == null)
+                return RedirectToAction("Index", "ManageStudentHome");
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                lichHocQuery = lichHocQuery.Where(lh => lh.TenMonHoc.Contains(searchString));
+            }
+
+            lichHocQuery = SortLichHoc(lichHocQuery, sortOrder);
+
+            int pageSize = 10;
             int pageNumber = (page ?? 1);
 
-            
-            return View(lich_hoc.ToPagedList(pageNumber, pageSize));
+            return View(lichHocQuery.ToPagedList(pageNumber, pageSize));
+        }
+
+        // Tách logic truy vấn theo vai trò
+        private IQueryable<LichHocViewModel> GetLichHocByRole(string role, int? userId)
+        {
+            if (role == "Admin")
+            {
+                return db.Lich_hoc
+                    .Include(lh => lh.Lop_hoc_phan.Mon_hoc)
+                    .Select(lh => new LichHocViewModel
+                    {
+                        MaLich = lh.ma_lich,
+                        ThoiGian = (DateTime)lh.thoi_gian,
+                        PhongHoc = lh.phong_hoc,
+                        TenLopChinh = lh.Lop_hoc_phan.Lop_chinh.ten_lop,
+                        TenMonHoc = lh.Lop_hoc_phan.Mon_hoc.ten_mon
+                    });
+            }
+            else if (role == "Student" && userId.HasValue)
+            {
+                var hocSinh = db.Hoc_sinh.FirstOrDefault(hs => hs.UserID == userId);
+                if (hocSinh == null)
+                    return null;
+
+                return db.Lich_hoc
+                    .Include(lh => lh.Lop_hoc_phan.Mon_hoc)
+                    .Where(lh => lh.Lop_hoc_phan.Lop_chinh.Hoc_sinh.Any(hs => hs.ma_sinh_vien == hocSinh.ma_sinh_vien))
+                    .Select(lh => new LichHocViewModel
+                    {
+                        MaLich = lh.ma_lich,
+                        ThoiGian = (DateTime)lh.thoi_gian,
+                        PhongHoc = lh.phong_hoc,
+                        TenLopChinh = lh.Lop_hoc_phan.Lop_chinh.ten_lop,
+                        TenMonHoc = lh.Lop_hoc_phan.Mon_hoc.ten_mon
+                    });
+            }
+            else if (role == "Teacher" && userId.HasValue)
+            {
+                var giaoVien = db.Giao_vien.FirstOrDefault(gv => gv.UserID == userId);
+                if (giaoVien == null)
+                    return null;
+
+                return db.Lich_hoc
+                    .Include(lh => lh.Lop_hoc_phan.Mon_hoc)
+                    .Where(lh => lh.Lop_hoc_phan.Phan_cong.Any(pc => pc.ma_giao_vien == giaoVien.ma_giao_vien))
+                    .Select(lh => new LichHocViewModel
+                    {
+                        MaLich = lh.ma_lich,
+                        ThoiGian = (DateTime)lh.thoi_gian,
+                        PhongHoc = lh.phong_hoc,
+                        TenLopChinh = lh.Lop_hoc_phan.Lop_chinh.ten_lop,
+                        TenMonHoc = lh.Lop_hoc_phan.Mon_hoc.ten_mon
+                    });
+            }
+
+            return null;
+        }
+
+        // Tách logic sắp xếp
+        private IQueryable<LichHocViewModel> SortLichHoc(IQueryable<LichHocViewModel> lichHocQuery, string sortOrder)
+        {
+            switch (sortOrder)
+            {
+                case "name":
+                    return lichHocQuery.OrderBy(lh => lh.TenMonHoc.Split(' ').LastOrDefault());
+                case "name_desc":
+                    return lichHocQuery.OrderByDescending(lh => lh.TenMonHoc.Split(' ').LastOrDefault());
+                case "date_desc":
+                    return lichHocQuery.OrderByDescending(lh => lh.ThoiGian);
+                default:
+                    return lichHocQuery.OrderBy(lh => lh.ThoiGian);
+            }
         }
         public ActionResult ExportToExcel()
         {
@@ -99,21 +164,7 @@ namespace ManageStudentsV2.Controllers
             // Trả về file CSV
             return File(fileBytes, "text/csv", fileName);
         }
-        // GET: Lich_hoc/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Lich_hoc lich_hoc = db.Lich_hoc.Find(id);
-            if (lich_hoc == null)
-            {
-                return HttpNotFound();
-            }
-            return View(lich_hoc);
-        }
-
+        
         // GET: Lich_hoc/Create
         public ActionResult Create()
         {

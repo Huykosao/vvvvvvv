@@ -19,32 +19,50 @@ namespace ManageStudentsV2.Controllers
         private Quan_Ly_Sinh_Vien_Entities db = new Quan_Ly_Sinh_Vien_Entities();
 
         // GET: Giao_vien
-        public ActionResult Index(int? size, int? page)
+        public ActionResult Index(String sortOrder, String currentFilter,String searchString,int? page)
         {
-            List<SelectListItem> items = new List<SelectListItem>();
-            items.Add(new SelectListItem { Text = "5", Value = "5" });
-            items.Add(new SelectListItem { Text = "10", Value = "10" });
-            items.Add(new SelectListItem { Text = "20", Value = "20" });
-            items.Add(new SelectListItem { Text = "25", Value = "25" });
-            items.Add(new SelectListItem { Text = "50", Value = "50" });
-            items.Add(new SelectListItem { Text = "100", Value = "100" });
-            items.Add(new SelectListItem { Text = "200", Value = "200" });
-            foreach (var item in items)
+            ViewBag.currentSort = sortOrder;
+            
+            ViewBag.NameSortParm = sortOrder == "name" ? "name_desc" : "name";
+            if (searchString != null)
             {
-                if (item.Value == size.ToString()) item.Selected = true;
+                page = 1;
             }
-            ViewBag.size = items; // ViewBag DropDownList
-            ViewBag.currentSize = size; // tạo biến kích thước trang hiện tại
-            page = page ?? 1; //if (page == null) page = 1;
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.currentFilter = searchString;
+
             var giao_vien = db.Giao_vien
                                 .Include(g => g.Khoa)
                                 .Include(g => g.User)
-                                .OrderBy(g => g.ten_giao_vien)
                                 .ToList();
-            int pageSize = (size ?? 5);
+            var giao_vien_list = giao_vien.AsEnumerable();
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                giao_vien_list = giao_vien_list.Where(g => g.ten_giao_vien.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "name":
+                    giao_vien_list = giao_vien_list.OrderByDescending(g => g.ten_giao_vien.Split(' ').LastOrDefault());
+                    break;
+                case "name_desc":
+                    giao_vien_list = giao_vien_list.OrderBy(g => g.ten_giao_vien.Split(' ').LastOrDefault());
+                    break;
+                case "date_desc":
+                    giao_vien_list = giao_vien_list.OrderByDescending(g => g.ma_giao_vien);
+                    break;
+                default:
+                    giao_vien_list = giao_vien_list.OrderBy(g => g.ma_giao_vien);
+                    break;
+            }
+
+            int pageSize =  10;
             int pageNumber = (page ?? 1);
 
-            return View(giao_vien.ToPagedList(pageNumber, pageSize));
+            return View(giao_vien_list.ToPagedList(pageNumber, pageSize));
         }
         public ActionResult ExportToExcel()
         {
@@ -77,21 +95,7 @@ namespace ManageStudentsV2.Controllers
             return File(fileBytes, "text/csv", fileName);
         }
 
-        // GET: Giao_vien/Details/5
-
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Giao_vien giao_vien = db.Giao_vien.Find(id);
-            if (giao_vien == null)
-            {
-                return HttpNotFound();
-            }
-            return View(giao_vien);
-        }
+        
 
         // GET: Giao_vien/Create
 
@@ -145,7 +149,6 @@ namespace ManageStudentsV2.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-
         public ActionResult Edit([Bind(Include = "ma_giao_vien,ten_giao_vien,ma_khoa,UserID")] Giao_vien giao_vien)
         {
             if (ModelState.IsValid)
@@ -168,6 +171,11 @@ namespace ManageStudentsV2.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Giao_vien giao_vien = db.Giao_vien.Find(id);
+            bool isGVCN = db.Lop_chinh.Where(lc => lc.giao_vien_chu_nhiem == giao_vien.ma_giao_vien).Any();
+            if (isGVCN) {
+                ViewBag.yeu_cau = "Vui lòng chọn giáo viên chủ nhiệm thay thế cho giáo viên : " + giao_vien.ten_giao_vien + " trước khi xóa !!!";
+            }
+
             if (giao_vien == null)
             {
                 return HttpNotFound();
@@ -183,6 +191,8 @@ namespace ManageStudentsV2.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Giao_vien giao_vien = db.Giao_vien.Find(id);
+            var phanCongLienQuan = db.Phan_cong.Where(pc => pc.ma_giao_vien == giao_vien.ma_giao_vien).ToList();
+            db.Phan_cong.RemoveRange(phanCongLienQuan);
             db.Giao_vien.Remove(giao_vien);
             db.SaveChanges();
             return RedirectToAction("Index");

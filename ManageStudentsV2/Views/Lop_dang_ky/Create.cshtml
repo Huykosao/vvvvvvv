@@ -5,53 +5,54 @@
     Layout = "~/Views/Shared/_ManageStudentHome.cshtml";
 }
 
-<h2>Create</h2>
-
-
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
-    <div class="form-horizontal">
-        <h4>Lop_dang_ky</h4>
-        <hr />
+
+    <div class="create-forms">
+        <h4>Lớp Đăng Ký</h4>
+
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.ma_sinh_vien, "ma_sinh_vien", htmlAttributes: new { @class = "control-label col-md-2" })
+
+        <!-- ma_sinh_vien Dropdown -->
+        <div class="field">
+            @Html.LabelFor(model => model.ma_sinh_vien, "Mã Sinh Viên", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("ma_sinh_vien", null, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownList("ma_sinh_vien", (IEnumerable<SelectListItem>)ViewBag.ma_sinh_vien, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.ma_sinh_vien, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.ma_hoc_phan, "ma_hoc_phan", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="field">
+            @Html.LabelFor(model => model.ma_hoc_phan, "Mã Học Phần", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownList("ma_hoc_phan", null, htmlAttributes: new { @class = "form-control" })
+                @Html.DropDownList("ma_hoc_phan", (IEnumerable<SelectListItem>)ViewBag.ma_hoc_phan, htmlAttributes: new { @class = "form-control" })
                 @Html.ValidationMessageFor(model => model.ma_hoc_phan, "", new { @class = "text-danger" })
             </div>
         </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.ngay_dk, htmlAttributes: new { @class = "control-label col-md-2" })
+
+        <!-- ngay_dk Editor -->
+        @*<div class="field">
+            @Html.LabelFor(model => model.ngay_dk, "Ngày đăng ký", htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
                 @Html.EditorFor(model => model.ngay_dk, new { htmlAttributes = new { @class = "form-control" } })
                 @Html.ValidationMessageFor(model => model.ngay_dk, "", new { @class = "text-danger" })
             </div>
-        </div>
+        </div>*@
 
-        <div class="form-group">
+        <!-- Submit Button -->
+        <div class="field">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Create" class="btn1" />
+                @Html.ActionLink("Cancel", "Index", null, new { @class = "btn2" })
             </div>
         </div>
     </div>
+
+
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
-
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
 }
+

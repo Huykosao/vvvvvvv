@@ -19,30 +19,44 @@ namespace ManageStudentsV2.Controllers
         private Quan_Ly_Sinh_Vien_Entities db = new Quan_Ly_Sinh_Vien_Entities();
 
         // GET: Nganh
-        public ActionResult Index(int? size, int? page)
+        public ActionResult Index(String sortOrder,String currentFilter,String searchString,int? page)
         {
-            List<SelectListItem> items = new List<SelectListItem>();
-            items.Add(new SelectListItem { Text = "5", Value = "5" });
-            items.Add(new SelectListItem { Text = "10", Value = "10" });
-            items.Add(new SelectListItem { Text = "20", Value = "20" });
-            items.Add(new SelectListItem { Text = "25", Value = "25" });
-            items.Add(new SelectListItem { Text = "50", Value = "50" });
-            items.Add(new SelectListItem { Text = "100", Value = "100" });
-            items.Add(new SelectListItem { Text = "200", Value = "200" });
-            foreach (var item in items)
+            ViewBag.currentSort = sortOrder;
+            ViewBag.NameSortParm = sortOrder == "name" ? "name_desc" : "name";
+            if (searchString != null)
             {
-                if (item.Value == size.ToString()) item.Selected = true;
+                page = 1;
             }
-            ViewBag.size = items; // ViewBag DropDownList
-            ViewBag.currentSize = size; // tạo biến kích thước trang hiện tại
-            page = page ?? 1;
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.currentFilter = searchString;
 
             var nganhs = db.Nganhs.Include(n => n.Nien_khoa).OrderBy(n => n.ma_nganh);
 
-            int pageSize = (size ?? 5);
+            var nganh_list = nganhs.AsEnumerable();
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                nganh_list = nganh_list.Where(n => n.ten_nganh.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "name":
+                    nganh_list = nganh_list.OrderBy(n => n.ten_nganh.Split(' ').LastOrDefault());
+                    break;
+                case "name_desc":
+                    nganh_list = nganh_list.OrderByDescending(n => n.ten_nganh.Split(' ').LastOrDefault());
+                    break;
+                default:
+                    nganh_list = nganh_list.OrderBy(n => n.ma_nganh);
+                    break;
+            }
+
+            int pageSize = 10;
             int pageNumber = (page ?? 1);
 
-            return View(nganhs.ToPagedList(pageNumber, pageSize));
+            return View(nganh_list.ToPagedList(pageNumber, pageSize));
         }
         public ActionResult ExportToExcel()
         {
@@ -74,20 +88,7 @@ namespace ManageStudentsV2.Controllers
             // Trả về file CSV
             return File(fileBytes, "text/csv", fileName);
         }
-        // GET: Nganh/Details/5
-        public ActionResult Details(int? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Nganh nganh = db.Nganhs.Find(id);
-            if (nganh == null)
-            {
-                return HttpNotFound();
-            }
-            return View(nganh);
-        }
+        
 
         // GET: Nganh/Create
         public ActionResult Create()
@@ -101,7 +102,7 @@ namespace ManageStudentsV2.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ma_nganh,ten_nganh,mo_ta_nganh,ma_nien_khoa")] Nganh nganh)
+        public ActionResult Create([Bind(Include = "ten_nganh,mo_ta_nganh,ma_nien_khoa")] Nganh nganh)
         {
             if (ModelState.IsValid)
             {

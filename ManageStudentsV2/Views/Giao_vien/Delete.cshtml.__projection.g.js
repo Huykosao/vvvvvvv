@@ -1,0 +1,10 @@
+/* BEGIN EXTERNAL SOURCE */
+function name17() {
+handelDelete()
+}
+/* END EXTERNAL SOURCE */
+/* BEGIN EXTERNAL SOURCE */
+
+
+
+/* END EXTERNAL SOURCE */

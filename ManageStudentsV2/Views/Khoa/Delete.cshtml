@@ -4,38 +4,15 @@
     ViewBag.Title = "Delete";
     Layout = "~/Views/Shared/_ManageStudentHome.cshtml";
 }
-
-<h2>Delete</h2>
-
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Khoa</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.ten_khoa)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ten_khoa)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.mo_ta_khoa)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.mo_ta_khoa)
-        </dd>
-
-    </dl>
-
-    @using (Html.BeginForm()) {
+<div class="create-forms">
+    <h3>Bạn Có Chắc Chắn Xóa Hàng Này Chứ  ? </h3>
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            <input type="submit" value="Delete" class="btn1" />
+            @Html.ActionLink("Cancel", "Index", null, new { @class = "btn2" })
         </div>
     }
 </div>

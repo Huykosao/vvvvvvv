@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My ASP.NET Application</title>
+    <link rel="icon" type="image/x-icon" href="~/dau.png" />
     @Styles.Render("~/Content/styles.css")
     @Styles.Render("~/Content/PagedList.css")
 </head>
@@ -11,10 +12,15 @@
     <header>
         <div class="menu">
             <!-- Logo -->
-            <a href="@Url.Action("Index", "ManageStudentHome")">
-                <img src="https://media.dau.edu.vn/Media/2_SVDAU/Images/dau-csv12982278-5-e.png" alt="dau">
-            </a>
-
+            @if (Session["UserID"] !=null )
+            {
+                <div class="Login-header"></div>
+            }else
+            {
+                <a href="@Url.Action("Index", "ManageStudentHome")">
+                    <img src="https://media.dau.edu.vn/Media/2_SVDAU/Images/dau-csv12982278-5-e.png" alt="dau">
+                </a>
+            }
             <!-- Đăng Nhập / Đăng Xuất -->
             <div class="Login">
                 @if (Session["UserID"] != null)
@@ -36,7 +42,10 @@
                     {
                         <nav>
                             <ul>
-                                <li><a href="@Url.Action("Index", "Hoc_sinh")">Danh sách Sinh Viên</a></li>
+                                <li><img src="https://media.dau.edu.vn/Media/1_TH1057/Images/logo-dhktdn-150.png" alt="dau"></li>
+                                <li >
+                                    <a href="@Url.Action("Index", "Hoc_sinh")">Danh Sách Học Sinh</a>
+                                </li>                              
                                 <li><a href="@Url.Action("Index", "Lop_Chinh")">Danh Sách Các Lớp</a></li>
                                 <li><a href="@Url.Action("Index", "Lop_hoc_phan")">Lớp học phần</a></li>
                                 <li><a href="@Url.Action("Index", "Giao_vien")">Danh Sách Các Giáo Viên</a></li>
@@ -45,31 +54,40 @@
                                 <li><a href="@Url.Action("Index", "Nganh")">Danh Sách Các Ngành</a></li>
                                 <li><a href="@Url.Action("Index", "Khoa")">Danh Sách Các Khoa</a></li>
                                 <li><a href="@Url.Action("Index", "Lich_hoc")">Tạo lịch học</a></li>
-                               
+                                <li><a href="@Url.Action("Index", "Phan_cong")">Phân công</a></li>
+                                <li><a href="@Url.Action("Index", "Lop_dang_ky")">Lớp Đăng ký</a></li>
                             </ul>
                         </nav>
                     }
 
                     @if (Session["Role"].ToString() == "Teacher")
                     {
+                        <li><img src="https://media.dau.edu.vn/Media/1_TH1057/Images/logo-dhktdn-150.png" alt="dau"></li>
                         <li><a href="@Url.Action("Index", "Lop_hoc_phan")">Lớp học phần của tôi</a></li>
-                        <li><a href="@Url.Action("Index", "Diem")">Nhập điểm</a></li>
+                        @*<li><a href="@Url.Action("Index", "Diem")">Nhập điểm</a></li>*@
                         <li><a href="@Url.Action("Index", "Lich_hoc")">Lịch giảng dạy</a></li>
                     }
 
                     @if (Session["Role"].ToString() == "Student")
                     {
+                        <li><img src="https://media.dau.edu.vn/Media/1_TH1057/Images/logo-dhktdn-150.png" alt="dau"></li>
+
+                        <li><a href="@Url.Action("Index", "ManageStudentHome")">Dasdboard</a></li>
                         <li><a href="@Url.Action("Index", "Mon_hoc")">Danh sách Môn học</a></li>
                         <li><a href="@Url.Action("Index", "Lop_dang_ky")">Lớp học phần đã đăng ký</a></li>
-                        <li><a href="@Url.Action("Index", "Lop_hoc_phan")">Đăng ký học phần</a></li>
+                        
                         <li><a href="@Url.Action("Index", "Diem")">Xem điểm</a></li>
                         <li><a href="@Url.Action("Index", "Lich_hoc")">Lịch học</a></li>
                     }
                 </ul>
-         </nav>          
+            </nav>
         }
-        </header>
+    </header>
     @RenderBody()
 
+
 </body>
+
+@RenderSection("Scripts", required: false)
 </html>
+

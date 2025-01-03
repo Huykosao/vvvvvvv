@@ -21,7 +21,7 @@ using System.Web.UI;
 using System.Web.WebPages;
 using System.Web.WebPages.Html;
 
-#line 2 "C:\Users\trant\AppData\Local\Temp\2C003857BCE22DFC0094D35884325122BBCC\3\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+#line 2 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38C806F3\5\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
 using PagedList.Mvc;
 
 #line default
@@ -39,14 +39,14 @@ return ((System.Web.HttpApplication)(Context.ApplicationInstance));
 }
 public override void Execute() {
 
-#line 1 "C:\Users\trant\AppData\Local\Temp\2C003857BCE22DFC0094D35884325122BBCC\3\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+#line 1 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38C806F3\5\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
 __o = model;
 
 
 #line default
 #line hidden
 
-#line 3 "C:\Users\trant\AppData\Local\Temp\2C003857BCE22DFC0094D35884325122BBCC\3\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+#line 3 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38C806F3\5\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
   
     ViewBag.Title = "Danh sách Lớp Chính";
     Layout = "~/Views/Shared/_ManageStudentHome.cshtml";
@@ -55,14 +55,50 @@ __o = model;
 #line default
 #line hidden
 
-#line 4 "C:\Users\trant\AppData\Local\Temp\2C003857BCE22DFC0094D35884325122BBCC\3\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+#line 4 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38C806F3\5\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+        using (Html.BeginForm())
+        {
+            
+
+#line default
+#line hidden
+
+#line 5 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38C806F3\5\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+           __o = Html.TextBox("SearchString", null, new { @class = "search-input", placeholder = "Nhập tên cần tìm..." });
+
+
+#line default
+#line hidden
+
+#line 6 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38C806F3\5\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+                  
+        }
+
+#line default
+#line hidden
+
+#line 7 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38C806F3\5\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+   __o = Html.ActionLink("Xuất Excel", "ExportToExcel", null, new { @class = "btnAdd" });
+
+
+#line default
+#line hidden
+
+#line 8 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38C806F3\5\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
    __o = Html.ActionLink("+ Thêm Lớp", "Create", null, new { @class = "btnAdd" });
 
 
 #line default
 #line hidden
 
-#line 5 "C:\Users\trant\AppData\Local\Temp\2C003857BCE22DFC0094D35884325122BBCC\3\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+#line 9 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38C806F3\5\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+           __o = Html.ActionLink("Tên Lớp", "Index", new { sortOrder = ViewBag.NameSortParm });
+
+
+#line default
+#line hidden
+
+#line 10 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38C806F3\5\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
         if (Model != null && Model.Any())
         {
             foreach (var item in Model)
@@ -72,70 +108,70 @@ __o = model;
 #line default
 #line hidden
 
-#line 6 "C:\Users\trant\AppData\Local\Temp\2C003857BCE22DFC0094D35884325122BBCC\3\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+#line 11 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38C806F3\5\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
                    __o = Html.DisplayFor(modelItem => item.TenLop);
 
 
 #line default
 #line hidden
 
-#line 7 "C:\Users\trant\AppData\Local\Temp\2C003857BCE22DFC0094D35884325122BBCC\3\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+#line 12 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38C806F3\5\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
                    __o = Html.DisplayFor(modelItem => item.SoLuongHocSinh);
 
 
 #line default
 #line hidden
 
-#line 8 "C:\Users\trant\AppData\Local\Temp\2C003857BCE22DFC0094D35884325122BBCC\3\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+#line 13 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38C806F3\5\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
                    __o = Html.DisplayFor(modelItem => item.GiaoVien);
 
 
 #line default
 #line hidden
 
-#line 9 "C:\Users\trant\AppData\Local\Temp\2C003857BCE22DFC0094D35884325122BBCC\3\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+#line 14 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38C806F3\5\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
                    __o = Html.DisplayFor(modelItem => item.Nganh);
 
 
 #line default
 #line hidden
 
-#line 10 "C:\Users\trant\AppData\Local\Temp\2C003857BCE22DFC0094D35884325122BBCC\3\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+#line 15 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38C806F3\5\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
                    __o = Html.DisplayFor(modelItem => item.NienKhoa);
 
 
 #line default
 #line hidden
 
-#line 11 "C:\Users\trant\AppData\Local\Temp\2C003857BCE22DFC0094D35884325122BBCC\3\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+#line 16 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38C806F3\5\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
                    __o = Html.DisplayFor(modelItem => item.Khoa);
 
 
 #line default
 #line hidden
 
-#line 12 "C:\Users\trant\AppData\Local\Temp\2C003857BCE22DFC0094D35884325122BBCC\3\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+#line 17 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38C806F3\5\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
                    __o = Html.ActionLink("Edit", "Edit", new { id = item.MaLop }, new { @class = "btnEdit" });
 
 
 #line default
 #line hidden
 
-#line 13 "C:\Users\trant\AppData\Local\Temp\2C003857BCE22DFC0094D35884325122BBCC\3\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+#line 18 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38C806F3\5\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
                    __o = Html.ActionLink("Details", "Details", new { id = item.MaLop }, new { @class = "btnDetails" });
 
 
 #line default
 #line hidden
 
-#line 14 "C:\Users\trant\AppData\Local\Temp\2C003857BCE22DFC0094D35884325122BBCC\3\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+#line 19 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38C806F3\5\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
                    __o = Html.ActionLink("Delete", "Delete", new { id = item.MaLop }, new { @class = "btnDelete" });
 
 
 #line default
 #line hidden
 
-#line 15 "C:\Users\trant\AppData\Local\Temp\2C003857BCE22DFC0094D35884325122BBCC\3\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+#line 20 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38C806F3\5\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
                      
             }
         }
@@ -146,41 +182,190 @@ __o = model;
 #line default
 #line hidden
 
-#line 16 "C:\Users\trant\AppData\Local\Temp\2C003857BCE22DFC0094D35884325122BBCC\3\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+#line 21 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38C806F3\5\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
                  
         }
 
 #line default
 #line hidden
 
-#line 17 "C:\Users\trant\AppData\Local\Temp\2C003857BCE22DFC0094D35884325122BBCC\3\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
-        using (Html.BeginForm("Index", "Lop_chinh", FormMethod.Get))
-        {
+#line 22 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38C806F3\5\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+if (Model?.Any() == true)
+
+{
+    
 
 #line default
 #line hidden
 
-#line 18 "C:\Users\trant\AppData\Local\Temp\2C003857BCE22DFC0094D35884325122BBCC\3\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
-                          __o = Html.DropDownList("size", (List<SelectListItem>)ViewBag.size, new { @onchange = "this.form.submit();" });
-
-
-#line default
-#line hidden
-
-#line 19 "C:\Users\trant\AppData\Local\Temp\2C003857BCE22DFC0094D35884325122BBCC\3\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
-                                                                                                                                             }
-
-#line default
-#line hidden
-
-#line 20 "C:\Users\trant\AppData\Local\Temp\2C003857BCE22DFC0094D35884325122BBCC\3\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
-                               __o = Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber;
+#line 23 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38C806F3\5\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+                                   __o = Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber;
 
 
 #line default
 #line hidden
 
-#line 21 "C:\Users\trant\AppData\Local\Temp\2C003857BCE22DFC0094D35884325122BBCC\3\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+#line 24 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38C806F3\5\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+                                                                                                 __o = Model.PageCount;
+
+
+#line default
+#line hidden
+
+#line 25 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38C806F3\5\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+   __o = Html.PagedListPager(Model, page => Url.Action("Index", new { page, size = ViewBag.currentSize }));
+
+
+#line default
+#line hidden
+
+#line 26 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38C806F3\5\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+          
+}
+
+#line default
+#line hidden
+}
+}
+}
+//------------------------------------------------------------------------------
+// <auto-generated>
+//     This code was generated by a tool.
+//     Runtime Version:4.0.30319.42000
+//
+//     Changes to this file may cause incorrect behavior and will be lost if
+//     the code is regenerated.
+// </auto-generated>
+//------------------------------------------------------------------------------
+
+namespace ASP {
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Web;
+using System.Web.Helpers;
+using System.Web.Security;
+using System.Web.UI;
+using System.Web.WebPages;
+using System.Web.WebPages.Html;
+
+#line 2 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38E806F3\4\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+using PagedList.Mvc;
+
+#line default
+#line hidden
+
+public class _Page_Views_Lop_chinh_Views_Lop_chinh_Index_cshtml : System.Web.WebPages.WebPage {
+private static object @__o;
+#line hiddeViews_Lop_chinh_n
+public _Page_Views_Lop_chinh_Index_cshtml() {
+}
+protected System.Web.HttpApplication ApplicationInstance {
+get {
+return ((System.Web.HttpApplication)(Context.ApplicationInstance));
+}
+}
+public override void Execute() {
+
+#line 1 "C:FEFEE86485FC0973872E8104942D38U806F3E46485FC0973872E8104942D38C806F3\4\ManageStudentsV2-master\ManageStudentsV2\Viewschinh\Index.cshtml"
+__o = model;
+
+
+#line default
+#line hidden
+
+#line 3 "C:FEFEE86485FC0973872E8104942\38C806F864\485FC0973872E8104942D38C806F3\4\ManageStudentsV2-master\ManageStudentsV2                 __oanh__ohared/_ManageStudentHome.cshtml";
+
+
+#line default
+#line hidden
+
+#line 4 "C:FEFEE86485FC0973872E8104942\38C806F864\485FC0973872E8104942D38C806F3\4\ManageStudentsV2-master\ManageStudentsV2                                                                                               ews\Loonchange        
+
+#line default
+#line hidden
+
+#line 5 "C:\Users\trant\AppData\Local\FEFEE86485FC0973872E8104942338C806F064\F3\4\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.csht  ;
+
+
+#line default
+#line hidden
+
+#line 6 "C:\Users\trant\AppData\Local\TeFEFEE86485FC0973872E8104942738C806F3643\4\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml     
+ i
+#line 7 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38C806F3\FEFEE86485FC0973872E8104942a38C806F3e4tsV2\Views\Lop_chinh\Index.cshtml"
+   __o = Html.ActionLink("Xuất Excel"           null,
+line hidden
+
+#line 8 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E810FEFEE86485FC0973872E8104942g38C806F3t4r\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+   __o = Html.ActionLin   eate"dne default
+#line hidden
+
+#line 9 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FEFEE86485FC0973872E8104942C38C806F3t4dentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+             ink("OBag.NameSortParm });
+
+
+#line default
+#line hidden
+
+#line 10 "C:\Users\trant\FEFEE86485FC0973872E8104942E38C806F374E8104942D38C806F3\4\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_ch                .  {
+            foreach (var item in Model)
+            {
+                
+
+#FEFEE86485FC0973872E8104942h38C806F314 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38C806F3\   mastec.cshtml"
+                   __o = Html.DisplayFor(modelItem => item.TenLop);
+
+FEFEE86485FC0973872E8104942D38#806F3e412 "C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38C806F3\4\ManageStudentsV2-ma.cplayFor(modelItem => item.SoLuongHocSinh);
+
+
+#line default
+#line hidden
+
+#liFEFEE86485FC0973872E8104942D38e806F3T4mp\FEFEE86485FC0973872E8104942D38C806F3\4\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chiisine default
+#line hidden
+
+#line 14 "C:\Users\trant\AppData\Local\Temp\FEFEE8648FEFEE86485FC0973872E8104942D38F806F3S4udentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+                   __o = Html.Diefant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38C806F3\4\ManageStudentsV2-masFEFEE86485FC0973872E8104942D38e806F3\4ndex.cshtml"
+                   __o = Html.DisplayFor(modelItem => item.                   __o = ;Temp38e 17 "C:\Users\trant\AppData\Local\Te16\FEFEE86485FC0973872E8104942D38C806FFEFEE86485FC0973872E8104942-38C806Fde4\ntsV2\Views\Lop_chinh\Index.cshtml"
+                   __o = Html.Actio                   __oM={;
+#l#l hidden
+
+#line 19 "C:\Users\trant\A17Data\Local\Temp\FEFEE86485FC0973872EFEFEE86485FC0973872E8104942D381806F3m4ster\ManageStudentsV2\Views\Lop_chinh\Index.cshtml"
+                   _                   __o = ;"C:\p\\AppData\Local\Temp\FEFEE86485FC0973818E8104942D38C806F3\4\ManageStudentsV2FEFEE86485FC0973872E8104942D38m806F3h4nh\Index.cshtml"
+                 
+        }
+
+#line default
+#line hi                   nageSt\ManageStudentsV2\Views\Lop_chinh\Index.csht19"
+                               __FEFEE86485FC0973872E8104942D38 806F3e4 ? 0 : Model.PageNumber;
+
+
+#line default
+#line hidden
+
+#line 23 "C:                   \UsersudentsV2\Views\Lop_chinh\Index.cshtm;#linee20f"C:\Users\trant\AppData\Local\Temp\FEFEE86485FC0973872E8104942D38C806F3\4\ManageStudentsV2-master\ManageStudentsV2\Views\Lop_chinh\Index/cshtml"--                   __o-=ict be ASP {
+using System;
+using Syst.Web;21WeStudentsV2-master\ManageStudentsV2FEFEE86485FC0973872E8104942e38j806F3c20op_chinh\Index.cshtml"
+__o = model;
+
+
+#line default
+#line hidden
+                               line htemp\ne 16 "C:\Users\trant\AppData\Local\Tem222C003857BCE22DFC0094D35884325122BBCCFEFEE86485FC0973872E8104942m38C806F3d4ntsV2\Views\Lop_chinh\Index.cshtml"
+                 
+        }
+
+#lin                                    
+#lineeex.c            __o = Html.DropDownList("si23", (List<SelectListItem>)ViewBag.sizFEFEE86485FC0973872E8104942 38 806F3 4  ? 0 : Model.PageNumber;
+
+
+#line default
+#line hidden
+
+#line 21 "C:\UsertudentsV2\Views\Lop_chinh\Index.cshtml"
                                                                                              __o = Model.PageCount;
 
 
