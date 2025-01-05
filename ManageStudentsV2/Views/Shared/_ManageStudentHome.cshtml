@@ -42,42 +42,42 @@
                     {
                         <nav>
                             <ul>
-                                <li><img src="https://media.dau.edu.vn/Media/1_TH1057/Images/logo-dhktdn-150.png" alt="dau"></li>
+                                <li><a href="@Url.Action("Index", "ManageStudentHome")"><img src="https://media.dau.edu.vn/Media/1_TH1057/Images/logo-dhktdn-150.png" alt="dau"></a></li>
+                                <li><a class="link" href="@Url.Action("Index", "Khoa")">Danh Sách Các Khoa</a></li>
+                                <li><a class="link" href="@Url.Action("Index", "Nien_khoa")">Danh Sách Các Niên Khóa</a></li>
+                                <li><a class="link" href="@Url.Action("Index", "Nganh")">Danh Sách Các Ngành</a></li>
+                                <li><a class="link" href="@Url.Action("Index", "Giao_vien")">Danh Sách Các Giáo Viên</a></li>
+                                <li><a class="link" href="@Url.Action("Index", "Lop_Chinh")">Danh Sách Các Lớp</a></li>
                                 <li >
-                                    <a href="@Url.Action("Index", "Hoc_sinh")">Danh Sách Học Sinh</a>
+                                    <a class="link" href="@Url.Action("Index", "Hoc_sinh")">Danh Sách Học Sinh</a>
                                 </li>                              
-                                <li><a href="@Url.Action("Index", "Lop_Chinh")">Danh Sách Các Lớp</a></li>
-                                <li><a href="@Url.Action("Index", "Lop_hoc_phan")">Lớp học phần</a></li>
-                                <li><a href="@Url.Action("Index", "Giao_vien")">Danh Sách Các Giáo Viên</a></li>
-                                <li><a href="@Url.Action("Index", "Nien_khoa")">Danh Sách Các Niên Khóa</a></li>
-                                <li><a href="@Url.Action("Index", "Mon_hoc")">Danh Sách Các Môn Học</a></li>
-                                <li><a href="@Url.Action("Index", "Nganh")">Danh Sách Các Ngành</a></li>
-                                <li><a href="@Url.Action("Index", "Khoa")">Danh Sách Các Khoa</a></li>
-                                <li><a href="@Url.Action("Index", "Lich_hoc")">Tạo lịch học</a></li>
-                                <li><a href="@Url.Action("Index", "Phan_cong")">Phân công</a></li>
-                                <li><a href="@Url.Action("Index", "Lop_dang_ky")">Lớp Đăng ký</a></li>
+                                <li><a class="link" href="@Url.Action("Index", "Mon_hoc")">Danh Sách Các Môn Học</a></li>
+                                <li><a class="link" href="@Url.Action("Index", "Lop_hoc_phan")">Lớp học phần</a></li>
+                                <li><a class="link" href="@Url.Action("Index", "Lop_dang_ky")">Lớp Đăng ký</a></li>
+                                <li><a class="link" href="@Url.Action("Index", "Lich_hoc")">Tạo lịch học</a></li>
+                                <li><a class="link" href="@Url.Action("Index", "Phan_cong")">Phân công</a></li>
                             </ul>
                         </nav>
                     }
 
                     @if (Session["Role"].ToString() == "Teacher")
                     {
-                        <li><img src="https://media.dau.edu.vn/Media/1_TH1057/Images/logo-dhktdn-150.png" alt="dau"></li>
-                        <li><a href="@Url.Action("Index", "Lop_hoc_phan")">Lớp học phần của tôi</a></li>
+                        <li><a href="@Url.Action("Index", "ManageStudentHome")"><img src="https://media.dau.edu.vn/Media/1_TH1057/Images/logo-dhktdn-150.png" alt="dau"></a></li>
+                        <li><a class="link" href="@Url.Action("Index", "Lop_hoc_phan")">Lớp học phần của tôi</a></li>
                         @*<li><a href="@Url.Action("Index", "Diem")">Nhập điểm</a></li>*@
-                        <li><a href="@Url.Action("Index", "Lich_hoc")">Lịch giảng dạy</a></li>
+                        <li><a class="link" href="@Url.Action("Index", "Lich_hoc")">Lịch giảng dạy</a></li>
                     }
 
                     @if (Session["Role"].ToString() == "Student")
                     {
-                        <li><img src="https://media.dau.edu.vn/Media/1_TH1057/Images/logo-dhktdn-150.png" alt="dau"></li>
+                        <li><a href="@Url.Action("Index", "ManageStudentHome")"><img src="https://media.dau.edu.vn/Media/1_TH1057/Images/logo-dhktdn-150.png" alt="dau"></a></li>
 
-                        <li><a href="@Url.Action("Index", "ManageStudentHome")">Dasdboard</a></li>
-                        <li><a href="@Url.Action("Index", "Mon_hoc")">Danh sách Môn học</a></li>
-                        <li><a href="@Url.Action("Index", "Lop_dang_ky")">Lớp học phần đã đăng ký</a></li>
+                        <li><a class="link" href="@Url.Action("Index", "ManageStudentHome")">Dasdboard</a></li>
+                        <li><a class="link" href="@Url.Action("Index", "Mon_hoc")">Danh sách Môn học</a></li>
+                        <li><a class="link" href="@Url.Action("Index", "Lop_dang_ky")">Lớp học phần đã đăng ký</a></li>
                         
-                        <li><a href="@Url.Action("Index", "Diem")">Xem điểm</a></li>
-                        <li><a href="@Url.Action("Index", "Lich_hoc")">Lịch học</a></li>
+                        <li><a class="link" href="@Url.Action("Index", "Diem")">Xem điểm</a></li>
+                        <li><a class="link" href="@Url.Action("Index", "Lich_hoc")">Lịch học</a></li>
                     }
                 </ul>
             </nav>

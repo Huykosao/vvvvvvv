@@ -5,7 +5,6 @@
     Layout = "~/Views/Shared/_ManageStudentHome.cshtml";
 }
 <div class="container">
-
     <div class="headerAdd">
         <h2>Danh sách Lớp học Phần</h2>
         <div class="button-add">
@@ -71,9 +70,11 @@
         </tbody>
     </table>
 
-    @if (Session["Role"].ToString() == "Admin" && Session["Role"] != null)
+    @if (Model?.Any() == true)
+
     {
         <div class="row">
+
             <div class="col_right"> Trang: @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount </div>
             @Html.PagedListPager(Model, page => Url.Action("Index", new { page, size = ViewBag.currentSize }))
         </div>

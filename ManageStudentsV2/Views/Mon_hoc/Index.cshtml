@@ -1,4 +1,4 @@
-﻿@model PagedList.IPagedList<ManageStudentsV2.Models.Mon_hoc>
+﻿﻿@model PagedList.IPagedList<ManageStudentsV2.Models.Mon_hoc>
 @using PagedList.Mvc;
 
 @{
@@ -6,20 +6,19 @@
     Layout = "~/Views/Shared/_ManageStudentHome.cshtml";
 }
 <div class="container">
-
     <div class="headerAdd">
         <h2>Danh sách Môn Học</h2>
         <div class="button-add">
             @if (Session["Role"].ToString() == "Admin")
             {
-                using (Html.BeginForm())
-                {
-                    <div class="search-form">
-                        @Html.TextBox("SearchString", null, new { @class = "search-input", placeholder = "Nhập tên cần tìm..." })
-                    </div>
-                }
-                @Html.ActionLink("Xuất Excel", "ExportToExcel", null, new { @class = "btnAdd" })
-                @Html.ActionLink("+ Thêm Môn Học", "Create", null, new { @class = "btnAdd" })
+            using (Html.BeginForm())
+            {
+                <div class="search-form">
+                    @Html.TextBox("SearchString", null, new { @class = "search-input", placeholder = "Nhập tên cần tìm..." })
+                </div>
+            }
+            @Html.ActionLink("Xuất Excel", "ExportToExcel", null, new { @class = "btnAdd" })
+            @Html.ActionLink("+ Thêm Môn Học", "Create", null, new { @class = "btnAdd" })
             }
         </div>
     </div>
@@ -35,7 +34,10 @@
                 <th>Ngành</th>
                 <th>Khóa</th>
                 <th>Khoa</th>
-                <th>Hành Động</th>
+                @if (Session["Role"].ToString() == "Admin")
+                {
+                    <th>Hành Động</th>
+                }
             </tr>
         </thead>
         <tbody>
@@ -43,46 +45,44 @@
             {
                 foreach (var item in Model)
                 {
-                    <tr>
-                        <td>@Html.DisplayFor(modelItem => item.ten_mon)</td>
-                        <td>@Html.DisplayFor(modelItem => item.mo_ta_mon)</td>
-                        @*<td>
-                                                @foreach (var lhp in item.Lop_hoc_phan)
-                            {
-                                                <span>@lhp.Lop_chinh.ten_lop</span><br />
-                            }
-                                            </td>*@
-                        <td>@item.Nganh.ten_nganh</td>
-                        <td>@item.Nganh.Nien_khoa.ten_nien_khoa</td>
-                        <td>@item.Nganh.Nien_khoa.Khoa.ten_khoa</td>
-
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.ten_mon)</td>
+                <td>@Html.DisplayFor(modelItem => item.mo_ta_mon)</td>
+                @*<td>
+                                        @foreach (var lhp in item.Lop_hoc_phan)
+                    {
+                                        <span>@lhp.Lop_chinh.ten_lop</span><br />
+                    }
+                                    </td>*@
+                <td>@item.Nganh.ten_nganh</td>
+                <td>@item.Nganh.Nien_khoa.ten_nien_khoa</td>
+                <td>@item.Nganh.Nien_khoa.Khoa.ten_khoa</td>
+                @if (Session["Role"].ToString() == "Admin")
+                    {
                         <td>
                             @Html.ActionLink("Edit", "Edit", new { id = item.ma_mon }, new { @class = "btnEdit" }) |
                             @Html.ActionLink("Delete", "Delete", new { id = item.ma_mon }, new { @class = "btnDelete" })
                         </td>
-                    </tr>
+                    }
+            </tr>
                 }
             }
             else
             {
-                <tr>
-                    <td colspan="6" class="no-data">Không tìm thấy môn học nào phù hợp.</td>
-                </tr>
+            <tr>
+                <td colspan="6" class="no-data">Không tìm thấy môn học nào phù hợp.</td>
+            </tr>
             }
         </tbody>
     </table>
-
-    <br />
-    <br />
     <!-- Thêm mã phân trang -->
 
     @if (Model?.Any() == true)
 
     {
-        <div class="row">
-
-            <div class="col_right"> Trang: @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount </div>
-            @Html.PagedListPager(Model, page => Url.Action("Index", new { page, size = ViewBag.currentSize }))
-        </div>
+    <div class="row">
+        <div class="col_right"> Trang: @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) / @Model.PageCount </div>
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, size = ViewBag.currentSize }))
+    </div>
     }
 </div>

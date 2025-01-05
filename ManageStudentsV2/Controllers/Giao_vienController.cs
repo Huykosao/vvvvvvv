@@ -173,7 +173,7 @@ namespace ManageStudentsV2.Controllers
             Giao_vien giao_vien = db.Giao_vien.Find(id);
             bool isGVCN = db.Lop_chinh.Where(lc => lc.giao_vien_chu_nhiem == giao_vien.ma_giao_vien).Any();
             if (isGVCN) {
-                ViewBag.yeu_cau = "Vui lòng chọn giáo viên chủ nhiệm thay thế cho giáo viên : " + giao_vien.ten_giao_vien + " trước khi xóa !!!";
+                ViewBag.yeu_cau = "Vui lòng chọn giáo viên chủ nhiệm thay thế cho giáo viên " + giao_vien.ten_giao_vien + " trước khi xóa !!!";
             }
 
             if (giao_vien == null)
@@ -186,8 +186,6 @@ namespace ManageStudentsV2.Controllers
         // POST: Giao_vien/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        
-
         public ActionResult DeleteConfirmed(int id)
         {
             Giao_vien giao_vien = db.Giao_vien.Find(id);

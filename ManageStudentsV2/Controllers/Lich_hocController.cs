@@ -68,7 +68,7 @@ namespace ManageStudentsV2.Controllers
                     .Select(lh => new LichHocViewModel
                     {
                         MaLich = lh.ma_lich,
-                        ThoiGian = (DateTime)lh.thoi_gian,
+                        ThoiGian = lh.thoi_gian ?? DateTime.MinValue,
                         PhongHoc = lh.phong_hoc,
                         TenLopChinh = lh.Lop_hoc_phan.Lop_chinh.ten_lop,
                         TenMonHoc = lh.Lop_hoc_phan.Mon_hoc.ten_mon
@@ -86,7 +86,7 @@ namespace ManageStudentsV2.Controllers
                     .Select(lh => new LichHocViewModel
                     {
                         MaLich = lh.ma_lich,
-                        ThoiGian = (DateTime)lh.thoi_gian,
+                        ThoiGian = lh.thoi_gian ?? DateTime.MinValue,
                         PhongHoc = lh.phong_hoc,
                         TenLopChinh = lh.Lop_hoc_phan.Lop_chinh.ten_lop,
                         TenMonHoc = lh.Lop_hoc_phan.Mon_hoc.ten_mon
@@ -104,7 +104,7 @@ namespace ManageStudentsV2.Controllers
                     .Select(lh => new LichHocViewModel
                     {
                         MaLich = lh.ma_lich,
-                        ThoiGian = (DateTime)lh.thoi_gian,
+                        ThoiGian = lh.thoi_gian ?? DateTime.MinValue,
                         PhongHoc = lh.phong_hoc,
                         TenLopChinh = lh.Lop_hoc_phan.Lop_chinh.ten_lop,
                         TenMonHoc = lh.Lop_hoc_phan.Mon_hoc.ten_mon

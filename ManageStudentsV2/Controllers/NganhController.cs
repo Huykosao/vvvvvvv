@@ -160,6 +160,10 @@ namespace ManageStudentsV2.Controllers
             {
                 return HttpNotFound();
             }
+
+            ViewBag.canh_bao = "Thao tác này sẽ xóa tất cả các lớp liên quan (Lớp chính, hoc sinh, môn học, ...) !!!";
+            ViewBag.tips = "Chuyển các môn, lớp sang một ngành khác để giữ lại thông tin";
+
             return View(nganh);
         }
 
@@ -168,10 +172,72 @@ namespace ManageStudentsV2.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Nganh nganh = db.Nganhs.Find(id);
-            db.Nganhs.Remove(nganh);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            using (var transaction = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    Nganh nganh = db.Nganhs.Find(id);
+
+                    var nganh_lopchinh = db.Lop_chinh.Where(lc => lc.ma_nganh  == nganh.ma_nganh).ToList();
+                    foreach( var lop_chinh in nganh_lopchinh)
+                    {
+                        var lopchinh_hocsinh = db.Hoc_sinh.Where(hs => hs.ma_lop == lop_chinh.ma_lop).ToList();
+                        foreach (var hoc_sinh in lopchinh_hocsinh)
+                        {
+                            var hocsinh_lopdangky = db.Lop_dang_ky.Where(ldk => ldk.ma_sinh_vien == hoc_sinh.ma_sinh_vien).ToList();
+                            var hocsinh_diem = db.Diems.Where(d => d.ma_sinh_vien == hoc_sinh.ma_sinh_vien).ToList();
+                            db.Diems.RemoveRange(hocsinh_diem);
+                            db.Lop_dang_ky.RemoveRange(hocsinh_lopdangky);
+                            db.Hoc_sinh.Remove(hoc_sinh);
+                        }
+
+                        var lopchinh_lophocphan = db.Lop_hoc_phan.Where(lhp => lhp.ma_lop == lop_chinh.ma_lop).ToList();
+                        foreach (var lop_hoc_phan in lopchinh_lophocphan)
+                        {
+                            var lophocphan_lichhoc = db.Lich_hoc.Where(l => l.ma_hoc_phan == lop_hoc_phan.ma_hoc_phan).ToList();
+                            var lophocphan_phancong = db.Phan_cong.Where(pc => pc.ma_hoc_phan == lop_hoc_phan.ma_hoc_phan).ToList();
+                            var lophocphan_lopdangky = db.Lop_dang_ky.Where(ldk => ldk.ma_hoc_phan == lop_hoc_phan.ma_hoc_phan).ToList();
+                            db.Lop_dang_ky.RemoveRange(lophocphan_lopdangky);
+                            db.Lich_hoc.RemoveRange(lophocphan_lichhoc);
+                            db.Phan_cong.RemoveRange(lophocphan_phancong);
+                            db.Lop_hoc_phan.Remove(lop_hoc_phan);
+                        }
+
+                        db.Lop_chinh.Remove(lop_chinh);
+                    }
+
+                    var nganh_monhoc = db.Mon_hoc.Where(mh => mh.ma_nganh == nganh.ma_nganh).ToList();
+                    foreach( var mon_hoc in nganh_monhoc)
+                    {
+                        var monhoc_diem = db.Diems.Where(d => d.ma_mon == mon_hoc.ma_mon).ToList();
+                        var monhoc_lophocphan = db.Lop_hoc_phan.Where(lhp => lhp.ma_mon == mon_hoc.ma_mon).ToList();
+                        foreach (var lophocphan in monhoc_lophocphan)
+                        {
+                            var lichhoc = db.Lich_hoc.Where(lh => lh.ma_hoc_phan == lophocphan.ma_hoc_phan).ToList();
+                            var phancong = db.Phan_cong.Where(pc => pc.ma_hoc_phan == lophocphan.ma_hoc_phan).ToList();
+                            var lopdangky = db.Lop_dang_ky.Where(ldk => ldk.ma_hoc_phan == lophocphan.ma_hoc_phan).ToList();
+                            db.Lop_dang_ky.RemoveRange(lopdangky);
+                            db.Lich_hoc.RemoveRange(lichhoc);
+                            db.Phan_cong.RemoveRange(phancong);
+                        }
+
+                        db.Diems.RemoveRange(monhoc_diem);
+                        db.Lop_hoc_phan.RemoveRange(monhoc_lophocphan);
+                        db.Mon_hoc.Remove(mon_hoc);
+                    }
+
+                    db.Nganhs.Remove(nganh);
+                    db.SaveChanges();
+                    transaction.Commit();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception ex)
+                {
+                    transaction.Rollback();
+                    Console.WriteLine("Transaction failed: " + ex.Message);
+                    return RedirectToAction("Index");
+                }
+            }
         }
 
         protected override void Dispose(bool disposing)

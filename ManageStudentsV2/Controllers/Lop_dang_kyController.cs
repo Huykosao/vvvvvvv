@@ -116,6 +116,7 @@ namespace ManageStudentsV2.Controllers
 
 
         // GET: Lop_dang_ky/Create
+        [RoleAuthorize("Admin", "Student")]
 
         public ActionResult Create()
         {
@@ -178,7 +179,7 @@ namespace ManageStudentsV2.Controllers
             return RedirectToAction("Index", "ManageStudentHome");
         }
 
-        [RoleAuthorize("Admin")]
+        [RoleAuthorize("Admin", "Student")]
         // POST: Lop_dang_ky/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
@@ -272,7 +273,7 @@ namespace ManageStudentsV2.Controllers
             }
             return View(lop_dang_ky);
         }
-        [RoleAuthorize("Admin")]
+        [RoleAuthorize("Admin", "Student")]
         // POST: Lop_dang_ky/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

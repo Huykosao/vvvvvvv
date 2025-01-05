@@ -33,6 +33,406 @@ return ((System.Web.HttpApplication)(Context.ApplicationInstance));
 }
 public override void Execute() {
 
+#line 1 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+      __o = ViewBag.Title;
+
+
+#line default
+#line hidden
+
+#line 2 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+__o = Styles.Render("~/Content/styles.css");
+
+
+#line default
+#line hidden
+
+#line 3 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+__o = Styles.Render("~/Content/PagedList.css");
+
+
+#line default
+#line hidden
+
+#line 4 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+            if (Session["UserID"] !=null )
+            {
+                
+
+#line default
+#line hidden
+
+#line 5 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                                
+            }else
+            {
+                
+
+#line default
+#line hidden
+
+#line 6 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                    __o = Url.Action("Index", "ManageStudentHome");
+
+
+#line default
+#line hidden
+
+#line 7 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                    
+            }
+
+#line default
+#line hidden
+
+#line 8 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                if (Session["UserID"] != null)
+                {
+                    
+
+#line default
+#line hidden
+
+#line 9 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                              __o = Session["Username"];
+
+
+#line default
+#line hidden
+
+#line 10 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                                                 
+                    
+
+#line default
+#line hidden
+
+#line 11 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                        __o = Url.Action("Logout", "Login");
+
+
+#line default
+#line hidden
+
+#line 12 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                                                          
+                }
+                else
+                {
+                    
+
+#line default
+#line hidden
+
+#line 13 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                        __o = Url.Action("Index", "Login");
+
+
+#line default
+#line hidden
+
+#line 14 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                                                         
+                }
+
+#line default
+#line hidden
+
+#line 15 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+        if (Session["UserID"] != null)
+        {
+            
+
+#line default
+#line hidden
+
+#line 16 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                    if (Session["Role"].ToString() == "Admin")
+                    {
+                        
+
+#line default
+#line hidden
+
+#line 17 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                        __o = Url.Action("Index", "Hoc_sinh");
+
+
+#line default
+#line hidden
+
+#line 18 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                        __o = Url.Action("Index", "Lop_Chinh");
+
+
+#line default
+#line hidden
+
+#line 19 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                        __o = Url.Action("Index", "Lop_hoc_phan");
+
+
+#line default
+#line hidden
+
+#line 20 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                        __o = Url.Action("Index", "Giao_vien");
+
+
+#line default
+#line hidden
+
+#line 21 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                        __o = Url.Action("Index", "Nien_khoa");
+
+
+#line default
+#line hidden
+
+#line 22 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                        __o = Url.Action("Index", "Mon_hoc");
+
+
+#line default
+#line hidden
+
+#line 23 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                        __o = Url.Action("Index", "Nganh");
+
+
+#line default
+#line hidden
+
+#line 24 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                        __o = Url.Action("Index", "Khoa");
+
+
+#line default
+#line hidden
+
+#line 25 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                        __o = Url.Action("Index", "Lich_hoc");
+
+
+#line default
+#line hidden
+
+#line 26 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                        __o = Url.Action("Index", "Phan_cong");
+
+
+#line default
+#line hidden
+
+#line 27 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                        __o = Url.Action("Index", "Lop_dang_ky");
+
+
+#line default
+#line hidden
+
+#line 28 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                              
+                    }
+
+#line default
+#line hidden
+
+#line 29 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                    if (Session["Role"].ToString() == "Teacher")
+                    {
+                        
+
+#line default
+#line hidden
+
+#line 30 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                                                                                                         
+                        
+
+#line default
+#line hidden
+
+#line 31 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                __o = Url.Action("Index", "Lop_hoc_phan");
+
+
+#line default
+#line hidden
+
+#line 32 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                                                                                        
+                        
+
+#line default
+#line hidden
+
+#line 33 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                                                                        
+                        
+
+#line default
+#line hidden
+
+#line 34 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                __o = Url.Action("Index", "Lich_hoc");
+
+
+#line default
+#line hidden
+
+#line 35 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                                                                              
+                    }
+
+#line default
+#line hidden
+
+#line 36 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                    if (Session["Role"].ToString() == "Student")
+                    {
+                        
+
+#line default
+#line hidden
+
+#line 37 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                                                                                                         
+
+                        
+
+#line default
+#line hidden
+
+#line 38 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                __o = Url.Action("Index", "ManageStudentHome");
+
+
+#line default
+#line hidden
+
+#line 39 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                                                                                  
+                        
+
+#line default
+#line hidden
+
+#line 40 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                __o = Url.Action("Index", "Mon_hoc");
+
+
+#line default
+#line hidden
+
+#line 41 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                                                                                
+                        
+
+#line default
+#line hidden
+
+#line 42 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                __o = Url.Action("Index", "Lop_dang_ky");
+
+
+#line default
+#line hidden
+
+#line 43 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                                                                                          
+                        
+                        
+
+#line default
+#line hidden
+
+#line 44 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                __o = Url.Action("Index", "Diem");
+
+
+#line default
+#line hidden
+
+#line 45 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                                                                    
+                        
+
+#line default
+#line hidden
+
+#line 46 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                __o = Url.Action("Index", "Lich_hoc");
+
+
+#line default
+#line hidden
+
+#line 47 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                                                                                        
+                    }
+
+#line default
+#line hidden
+
+#line 48 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+                  
+        }
+
+#line default
+#line hidden
+
+#line 49 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+__o = RenderBody();
+
+
+#line default
+#line hidden
+
+#line 50 "C:\Users\trant\AppData\Local\Temp\79393A15C9E0407FB6A471D0A2BD95E69C13\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
+__o = RenderSection("Scripts", required: false);
+
+
+#line default
+#line hidden
+}
+}
+}
+//------------------------------------------------------------------------------
+// <auto-generated>
+//     This code was generated by a tool.
+//     Runtime Version:4.0.30319.42000
+//
+//     Changes to this file may cause incorrect behavior and will be lost if
+//     the code is regenerated.
+// </auto-generated>
+//------------------------------------------------------------------------------
+
+namespace ASP {
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Net;
+using System.Web;
+using System.Web.Helpers;
+using System.Web.Security;
+using System.Web.UI;
+using System.Web.WebPages;
+using System.Web.WebPages.Html;
+
+public class _Page__ManageStudentHome_cshtml : System.Web.WebPages.WebPage {
+private static object @__o;
+#line hidden
+public _Page__ManageStudentHome_cshtml() {
+}
+protected System.Web.HttpApplication ApplicationInstance {
+get {
+return ((System.Web.HttpApplication)(Context.ApplicationInstance));
+}
+}
+public override void Execute() {
+
 #line 1 "C:\Users\trant\AppData\Local\Temp\20F88DC556EF2FAA085404B9F660DC57AB77\2\ManageStudentsV2-master\ManageStudentsV2\Views\Shared\_ManageStudentHome.cshtml"
       __o = ViewBag.Title;
 

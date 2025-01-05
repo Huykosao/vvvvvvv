@@ -6,12 +6,16 @@
 }
 <div class="create-forms">
     <h3>Bạn Có Chắc Chắn Xóa Hàng Này Chứ  ? </h3>
+    @if (ViewBag.canh_bao != null)
+    {
+        <div class="Warning">⚠️⚠️ Cảnh Báo : @ViewBag.canh_bao</div>
+    }
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn1" />
+            <input type="submit" value="Xóa" class="btn1" />
             @Html.ActionLink("Cancel", "Index", null, new { @class = "btn2" })
         </div>
     }

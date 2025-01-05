@@ -9,14 +9,14 @@
     <h2>Bạn Có Chắc Chắn Xóa @Model.ten_giao_vien Này Chứ  ? </h2>
     @if(ViewBag.yeu_cau != null)
     {
-        <div class="hacBa">@ViewBag.yeu_cau</div>   
+        <div class="hacBa">⚠️⚠️⚠️ Yêu Cầu : @ViewBag.yeu_cau</div>   
     }
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
 
         <div class="form-actions">
-            <input type="@(ViewBag.yeu_cau == null ? "submit" : "hidden")" value="Delete" class="btn1" />
+            <input type="@(ViewBag.yeu_cau == null ? "submit" : "hidden")" value="Xóa" class="btn1" />
             @Html.ActionLink("Cancel", "Index", null, new { @class = "btn2" })
         </div>
     }
