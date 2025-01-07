@@ -50,14 +50,20 @@
                         <td>@Html.DisplayFor(modelItem => item.Nganh)</td>
                         <td>@Html.DisplayFor(modelItem => item.NienKhoa)</td>
                         <td>@Html.DisplayFor(modelItem => item.Khoa)</td>
-                        <td>
-                            @Html.ActionLink("Edit", "Edit", new { id = item.MaHocPhan }) |
-                            @Html.ActionLink("Delete", "Delete", new { id = item.MaHocPhan }) |
+                        
+                            @if (Session["Role"].ToString() == "Admin")
+                            {<td>
+                                @Html.ActionLink("Edit", "Edit", new { id = item.MaHocPhan }) |
+                                @Html.ActionLink("Delete", "Delete", new { id = item.MaHocPhan }) |
+                            </td>
+                            }
                             @if (Session["Role"].ToString() == "Teacher")
                             {
-                                @Html.ActionLink("Nhập Điểm", "NhapDiem", "Diem", new { ma_hoc_phan = item.MaHocPhan }, null)
+                                <td>
+                                    @Html.ActionLink("Nhập Điểm", "NhapDiem", "Diem", new { ma_hoc_phan = item.MaHocPhan }, null)
+                                </td>
                             }
-                        </td>
+                            
                     </tr>
                 }
             }

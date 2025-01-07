@@ -4,7 +4,9 @@
     list-style: none;
     text-decoration: none;
     box-sizing: border-box;
+    font-family: system-ui, -apple-system, sans-serif;
 }
+
 
 header {
     background: #2563eb;
@@ -20,7 +22,7 @@ header h1 {
     letter-spacing: 0.5px;
     text-transform: uppercase;
 }
-    
+
 
 .menu {
     display: flex;
@@ -479,4 +481,83 @@ table a{
     padding: 20px;
     transition: margin-left 0.3s ease;
     
+}
+.container2 {
+
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+}
+.main-content {
+    flex: 1;
+    padding: 20px;
+}
+
+.quick-menu {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 16px;
+    margin-bottom: 30px;
+}
+
+.menu-item {
+    background: #bcd1ff;
+    padding: 16px;
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none;
+    color: #333;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+.menu-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.menu-item img {
+    width: 24px;
+    height: 24px;
+    margin-bottom: 8px;
+}
+
+.menu-item span {
+    display: block;
+    font-size: 13px;
+    color: #666;
+}
+.card {
+    background: #bcd1ff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.card-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: #333;
+}
+
+.info-row {
+    display: flex;
+    margin-bottom: 12px;
+    font-size: 14px;
+}
+
+.info-label {
+    width: 100px;
+    color: #666;
+    font-weight: 500;
+}
+
+.info-value {
+    flex: 1;
+    color: #333;
+}
+.img-left {
+    position: absolute;
+    top: 1.2%;
+    left: 1%;
 }

@@ -11,28 +11,58 @@
     {
         if (Model != null)
         {
-            <div class="information-student">
-                <h2>Student Dashboard</h2>
+           <div class="layout">
+               <main class="main-content">
+                   <div class="quick-menu">
+                       <a href="@Url.Action("Index", "Mon_hoc" )" class="menu-item">
+                           <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMLEBfiG8GVF8J0nu08Iib-OUi-A-tRNXx1Q&s" alt="dau" />
+                           <span>Danh Sách Môn Học</span>
+                       </a>
+                       <a href="@Url.Action("Index", "Lop_dang_ky")" class="menu-item">
+                           <img src="https://png.pngtree.com/png-vector/20190628/ourmid/pngtree-classroom-icon-for-your-project-png-image_1520459.jpg" alt="dau" />
+                           <span>Lớp học phần đã đăng ký</span>
+                       </a>
+                       <a href="@Url.Action("Index", "Diem")" class="menu-item">
+                           <img src="https://png.pngtree.com/png-clipart/20230418/original/pngtree-score-line-icon-png-image_9065442.png" alt="dau" />
+                           <span>Xem điểm</span>
+                       </a>
+                       <a href="@Url.Action("Index", "Lich_hoc")" class="menu-item">
+                           <img src="https://images.echocommunity.org/85032db6-de87-47fc-abaf-d1fa3a5f498f/calendar-icon-marketing-image.png?w=400" alt="dau">
+                           <span>Lịch học</span>
+                       </a>
+                   </div>
 
-                <div class="student-id">
-                    MSSV : @Model.ma_sinh_vien
-                </div>
-                <div class="student-name">
-                    Họ Tên : @Model.ten_sinh_vien
-                </div>
-                <div class="student-class">
-                    Lớp : @Model.Lop_chinh.ten_lop
-                </div>
-                <div class="student-major">
-                    Ngành : @Model.Lop_chinh.Nganh.ten_nganh
-                </div>
-                <div class="student-study-year">
-                    Niên Khóa : @Model.Lop_chinh.Nganh.Nien_khoa.ten_nien_khoa
-                </div>
-                <div class="student-department">
-                    Khoa : @Model.Lop_chinh.Nganh.Nien_khoa.Khoa.ten_khoa
-                </div>
-            </div>
+                   <div>
+                       <div class="card">
+                           <h2 class="card-title">Thông tin sinh viên</h2>
+                           <div class="info-row">
+                               <span class="info-label">MSSV:</span>
+                               <span class="info-value">@Model.ma_sinh_vien</span>
+                           </div>
+                           <div class="info-row">
+                               <span class="info-label">Họ Tên:</span>
+                               <span class="info-value">@Model.ten_sinh_vien</span>
+                           </div>
+                           <div class="info-row">
+                               <span class="info-label">Lớp:</span>
+                               <span class="info-value">@Model.Lop_chinh.ten_lop</span>
+                           </div>
+                           <div class="info-row">
+                               <span class="info-label">Ngành:</span>
+                               <span class="info-value">@Model.Lop_chinh.Nganh.ten_nganh</span>
+                           </div>
+                           <div class="info-row">
+                               <span class="info-label">Niên Khóa:</span>
+                               <span class="info-value">@Model.Lop_chinh.Nganh.Nien_khoa.ten_nien_khoa</span>
+                           </div>
+                           <div class="info-row">
+                               <span class="info-label">Khoa:</span>
+                               <span class="info-value">@Model.Lop_chinh.Nganh.Nien_khoa.Khoa.ten_khoa</span>
+                           </div>
+                       </div>
+                   </div>
+               </main>
+           </div>
         }
         else
         {

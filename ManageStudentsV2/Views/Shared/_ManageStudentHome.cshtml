@@ -12,13 +12,20 @@
     <header>
         <div class="menu">
             <!-- Logo -->
-            @if (Session["UserID"] !=null )
+            @if (Session["UserID"] != null)
             {
                 <div class="Login-header"></div>
-            }else
+            }
+            else
             {
                 <a href="@Url.Action("Index", "ManageStudentHome")">
                     <img src="https://media.dau.edu.vn/Media/2_SVDAU/Images/dau-csv12982278-5-e.png" alt="dau">
+                </a>
+            }
+            @if (Session["Role"] != null && Session["Role"].ToString() == "Student")
+            {
+                <a href="@Url.Action("Index", "ManageStudentHome")">
+                    <img src="https://media.dau.edu.vn/Media/2_SVDAU/Images/dau-csv12982278-5-e.png" class="img-left" alt="dau">
                 </a>
             }
             <!-- Đăng Nhập / Đăng Xuất -->
@@ -36,7 +43,9 @@
         </div>
         @if (Session["UserID"] != null)
         {
-            <nav>
+
+
+        <nav style="@(Session["Role"].ToString() == "Student" ? "display: none;" : "")">
                 <ul>
                     @if (Session["Role"].ToString() == "Admin")
                     {
@@ -68,17 +77,6 @@
                         <li><a class="link" href="@Url.Action("Index", "Lich_hoc")">Lịch giảng dạy</a></li>
                     }
 
-                    @if (Session["Role"].ToString() == "Student")
-                    {
-                        <li><a href="@Url.Action("Index", "ManageStudentHome")"><img src="https://media.dau.edu.vn/Media/1_TH1057/Images/logo-dhktdn-150.png" alt="dau"></a></li>
-
-                        <li><a class="link" href="@Url.Action("Index", "ManageStudentHome")">Dasdboard</a></li>
-                        <li><a class="link" href="@Url.Action("Index", "Mon_hoc")">Danh sách Môn học</a></li>
-                        <li><a class="link" href="@Url.Action("Index", "Lop_dang_ky")">Lớp học phần đã đăng ký</a></li>
-                        
-                        <li><a class="link" href="@Url.Action("Index", "Diem")">Xem điểm</a></li>
-                        <li><a class="link" href="@Url.Action("Index", "Lich_hoc")">Lịch học</a></li>
-                    }
                 </ul>
             </nav>
         }

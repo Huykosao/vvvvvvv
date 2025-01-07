@@ -5,7 +5,7 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_ManageStudentHome.cshtml";
 }
-<div class="container">
+<div class="@(Session["Role"].ToString() == "Student" ? "container2" : "container")">
     <div class="headerAdd">
         <h2>Danh sách Điểm</h2>
         <div class="button-add">
